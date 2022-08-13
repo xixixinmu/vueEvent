@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import {registerAPI} from "@/api/index"
+import { registerAPI } from "@/api/index";
 export default {
   name: "RegisterPage",
   data() {
@@ -85,14 +85,25 @@ export default {
     // 注册
     registerFn() {
       // js兜底校验  判断输入是否通过前端校验
-      this.$refs.form.validator((valid)=>{
-        if(valid){
-          
+      this.$refs.form.validate(async (valid) => {
+        if (valid) {
           // 通过校验
-        }else{
-          return false
+
+          // 把axios返回的数据对象data中的值存在res里
+          const { data: res } = await registerAPI(this.form);
+          if (res.code != 0) {
+            // code为0成功 1异常
+            return this.$message.error(res.message);
+            // $message为elementUI封装的弹窗
+          } else {
+            this.$message.success(res.message);
+            this.$router.push("./login");
+          }
+        } else {
+          return false;
+          // 阻止表单默认提交行为
         }
-      })
+      });
     },
   },
 };
