@@ -8,9 +8,9 @@ export const registerAPI = () => {
     url: "/api/reg",
     method: "POST",
     data: {
-      username: "zhl2",
-      password: "123456",
-      repassword: "123456",
+      username: "",
+      password: "",
+      repassword: "",
     },
   });
 };

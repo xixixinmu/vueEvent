@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import {registerAPI} from "@/api/index"
 export default {
   name: "RegisterPage",
   data() {
@@ -82,7 +83,17 @@ export default {
   },
   methods: {
     // 注册
-    registerFn() {},
+    registerFn() {
+      // js兜底校验  判断输入是否通过前端校验
+      this.$refs.form.validator((valid)=>{
+        if(valid){
+          
+          // 通过校验
+        }else{
+          return false
+        }
+      })
+    },
   },
 };
 </script>
