@@ -14,6 +14,7 @@
             placeholder="请输入密码"
             type="password"
             v-model="form.password"
+            show-password
           ></el-input>
         </el-form-item>
         <el-form-item prop="repassword">
@@ -21,13 +22,14 @@
             type="password"
             placeholder="请确认密码"
             v-model="form.repassword"
+            show-password
           ></el-input>
         </el-form-item>
-        <el-form-item id="register_button">
+        <el-form-item>
           <el-button type="primary" style="width: 100%" @click="registerFn"
             >注册</el-button
           >
-          <el-link type="info">去登录</el-link>
+          <el-link type="info" @click="goLogin">去登录</el-link>
         </el-form-item>
       </el-form>
     </div>
@@ -105,6 +107,9 @@ export default {
         }
       });
     },
+    goLogin() {
+      this.$router.push("./login");
+    },
   },
 };
 </script>
@@ -135,8 +140,6 @@ body {
       .title_box {
         height: 60px;
         background: url("@/assets/login_title.png") center no-repeat;
-      }
-      #register_button {
       }
     }
   }

@@ -17,3 +17,19 @@ export const registerAPI = ({ username, password, repassword }) => {
     },
   });
 };
+
+export const loginAPI = ({ username, password }) => {
+  //结构赋值传参，调用这个函数传参可以直接传整个对象
+
+  //原地是一个Promise对象(内部包含原生ajax请求)
+  // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
+
+  return request({
+    url: "/api/login",
+    method: "POST",
+    data: {
+      username,
+      password,
+    },
+  });
+};
