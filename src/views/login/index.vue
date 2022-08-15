@@ -30,6 +30,8 @@
 
 <script>
 import { loginAPI } from "@/api/index";
+import { mapMutations } from 'vuex'
+// 导入mutation中写的函数
 export default {
   name: "LoginPage",
   data() {
@@ -41,17 +43,21 @@ export default {
     };
   },
   methods: {
+    // 扩展运算符导入函数
+    ...mapMutations(["updateToken"]),
     async loginFn() {
       if (this.form.username != "" && this.form.password != "") {
         // 把axios返回的数据对象data中的值存在res里
         const { data: res } = await loginAPI(this.form);
         if (res.code != 0) {
           // code为0成功 1异常
-
           return this.$message.error(res.message);
           // $message为elementUI封装的弹窗
         } else {
           this.$message.success(res.message);
+          
+          // 调用mutation中的方法
+          this.updateToken(res.token)
         }
       } else {
         return false;
