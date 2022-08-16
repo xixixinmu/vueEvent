@@ -1,4 +1,6 @@
 import request from "@/utils/request";
+import store from '@/store/index'
+// 导入vuex的store直接获取state里的token
 
 export const registerAPI = ({ username, password, repassword }) => {
   //结构赋值传参，调用这个函数传参可以直接传整个对象
@@ -31,5 +33,18 @@ export const loginAPI = ({ username, password }) => {
       username,
       password,
     },
+  });
+};
+
+export const getUsersInfo = () => {
+  //原地是一个Promise对象(内部包含原生ajax请求)
+  // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
+  return request({
+    url: "/my/userinfo",
+    method: "GET",
+    headers:{
+      Authorization:store.state.token
+    }
+
   });
 };
