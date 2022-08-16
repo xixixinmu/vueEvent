@@ -17,6 +17,11 @@ const routes = [
     path: "/login",
     component: () => import("@/views/login"),
   },
+  {
+    path: "/layout",
+    component: () => import("@/views/layout"),
+    // 路由懒加载方式
+  },
 ];
 
 const router = new VueRouter({

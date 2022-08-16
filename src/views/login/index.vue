@@ -30,7 +30,7 @@
 
 <script>
 import { loginAPI } from "@/api/index";
-import { mapMutations } from 'vuex'
+import { mapMutations } from "vuex";
 // 导入mutation中写的函数
 export default {
   name: "LoginPage",
@@ -55,9 +55,9 @@ export default {
           // $message为elementUI封装的弹窗
         } else {
           this.$message.success(res.message);
-          
+          this.$router.push("/layout");
           // 调用mutation中的方法
-          this.updateToken(res.token)
+          this.updateToken(res.token);
         }
       } else {
         return false;
