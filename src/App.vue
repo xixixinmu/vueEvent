@@ -9,7 +9,9 @@
 
 
 export default {
-
+created(){
+  this.$store.dispatch("initUserInfo")
+}
 };
 </script>
 
