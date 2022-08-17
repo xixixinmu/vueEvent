@@ -35,12 +35,55 @@
     </el-header>
     <el-container>
       <!-- 侧边栏区域 -->
+
+      <!-- 侧边栏用户信息区域 -->
       <el-aside width="200px">
         <div class="user-box">
           <img :src="user_pic" alt="" v-if="user_pic" />
           <img src="@/assets/logo.png" v-else />
           <span>欢迎 {{ nickname || username }}</span>
         </div>
+        <!-- 侧边栏导航菜单 -->
+
+        <!-- 
+             default-active:当前激活菜单的index (el-submenu/el-menu-item的index值)，对应菜单就有激活样式@open: sub-menu展开的回调
+             @close: sub-menu关闭的回调
+             active-text-color:哪项index的值和default-active一致，就会被设置动态文字颜色
+         -->
+        <el-menu
+          default-active="/home"
+          class="el-menu-vertical-demo"
+          @open="handleOpen"
+          @close="handleClose"
+          background-color="#23262E"
+          text-color="#fff"
+          active-text-color="#409EFF"
+        >
+          <el-menu-item index="/home">
+            <i class="el-icon-s-home"></i>
+            <span slot="title">首页</span>
+          </el-menu-item>
+          <el-submenu index="/topic">
+            <template slot="title">
+              <i class="el-icon-s-order"></i>
+              <span>文章管理</span>
+            </template>
+            <el-menu-item>
+              <i class="el-icon-s-data"></i>
+              <span>文章分类</span>
+            </el-menu-item>
+            <el-menu-item>
+              <i class="el-icon-document-copy"></i>
+              <span>文章列表</span>
+            </el-menu-item>
+          </el-submenu>
+          <el-submenu>
+            <template slot="title">
+              <i class="el-icon-user-solid"></i>
+              <span>个人中心</span>
+            </template>
+          </el-submenu>
+        </el-menu>
       </el-aside>
       <el-container>
         <!-- 页面主体区域 -->
@@ -53,7 +96,7 @@
 </template>
 
 <script>
-import { mapMutations,mapGetters } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 
 //经验:在组件标签上绑定的所有事件(包括原生事件的名字click,input等等)//都是自定义事件，都需要组件内$emit来触发才行
 //万一组件内不支持这个原生事件名字
@@ -86,11 +129,17 @@ export default {
           });
         });
     },
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
+    },
   },
-  computed:{
-    ...mapGetters(["nickname","username","user_pic"]),
-// getters要映射到computed里
-  }
+  computed: {
+    ...mapGetters(["nickname", "username", "user_pic"]),
+    // getters要映射到computed里
+  },
 };
 </script>
 
@@ -119,26 +168,26 @@ export default {
     align-items: center;
   }
   .user-box {
-  height: 70px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-top: 1px solid #000;
-  border-bottom: 1px solid #000;
-  user-select: none;
-  img {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: #fff;
-    margin-right: 15px;
-    object-fit: cover;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    user-select: none;
+    img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background-color: #fff;
+      margin-right: 15px;
+      object-fit: cover;
+    }
+    span {
+      color: white;
+      font-size: 12px;
+    }
   }
-  span {
-    color: white;
-    font-size: 12px;
-  }
-}
 }
 
 .avatar {
@@ -149,6 +198,4 @@ export default {
   margin-right: 10px;
   object-fit: cover;
 }
-
-
 </style>
