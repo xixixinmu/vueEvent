@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import { loginAPI,getUsersInfoAPI } from "@/api/index";
-import { mapMutations } from "vuex";
+import { loginAPI } from "@/api/index";
+import { mapMutations,mapActions } from "vuex";
 // 导入mutation中写的函数
 export default {
   name: "LoginPage",
@@ -44,7 +44,8 @@ export default {
   },
   methods: {
     // 扩展运算符导入函数
-    ...mapMutations(["updateToken","updateUserInfo"]),
+    ...mapMutations(["updateToken"]),
+    ...mapActions(["initUserInfo"]),
     async loginFn() {
       if (this.form.username != "" && this.form.password != "") {
         // 把axios返回的数据对象data中的值存在res里
@@ -58,6 +59,7 @@ export default {
           this.$router.push("/layout");
           // 调用mutation中的方法
           this.updateToken(res.token);
+          this.initUserInfo()
         }
       } else {
         return false;

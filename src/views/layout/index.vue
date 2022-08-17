@@ -54,10 +54,9 @@ import { mapMutations } from "vuex";
 //解决:@事件名.native="methods里方法名"
 //.native给组件内根标签，绑定这个原生的事件
 export default {
-    
   name: "LayoutPage",
   methods: {
-    ...mapMutations(["updateToken"]),
+    ...mapMutations(["updateToken","updateUserInfo"]),
     logoutFn() {
       // 退出登录的逻辑：增加确认提示，去除token，强制跳转
       this.$confirm("是否退出登录？", "提示", {
@@ -68,11 +67,11 @@ export default {
         .then(() => {
           this.$message({
             type: "success",
-            message:"已退出登录"
+            message: "已退出登录",
           });
-          this.$router.push('/login')
-        //   this.updateToken("")
-        this.$store.commit("updateToken","")
+          this.$store.commit("updateToken", "");
+          this.$store.commit("updateUserInfo", {});
+          this.$router.push("/login");
         })
         .catch(() => {
           this.$message({
