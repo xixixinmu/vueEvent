@@ -14,7 +14,15 @@ export default new Vuex.Store({
     token: "",
     userInfo: {},
   },
-  getters: {},
+  getters: {
+    nickname(state) {
+       return state.userInfo.nickname;
+      //  完整写法
+    },
+    // 简写
+    username: (state) => state.userInfo.username,
+    user_pic: (state) => state.userInfo.user_pic,
+  },
   mutations: {
     // 2. 保存 token 的 mutation 函数
     // 编写操作变量的函数

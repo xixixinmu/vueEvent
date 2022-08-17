@@ -35,7 +35,13 @@
     </el-header>
     <el-container>
       <!-- 侧边栏区域 -->
-      <el-aside width="200px">Aside</el-aside>
+      <el-aside width="200px">
+        <div class="user-box">
+          <img :src="user_pic" alt="" v-if="user_pic" />
+          <img src="@/assets/logo.png" v-else />
+          <span>欢迎 {{ nickname || username }}</span>
+        </div>
+      </el-aside>
       <el-container>
         <!-- 页面主体区域 -->
         <el-main> Main.vue后台主页 </el-main>
@@ -47,7 +53,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations,mapGetters } from "vuex";
 
 //经验:在组件标签上绑定的所有事件(包括原生事件的名字click,input等等)//都是自定义事件，都需要组件内$emit来触发才行
 //万一组件内不支持这个原生事件名字
@@ -56,7 +62,7 @@ import { mapMutations } from "vuex";
 export default {
   name: "LayoutPage",
   methods: {
-    ...mapMutations(["updateToken","updateUserInfo"]),
+    ...mapMutations(["updateToken", "updateUserInfo"]),
     logoutFn() {
       // 退出登录的逻辑：增加确认提示，去除token，强制跳转
       this.$confirm("是否退出登录？", "提示", {
@@ -81,6 +87,10 @@ export default {
         });
     },
   },
+  computed:{
+    ...mapGetters(["nickname","username","user_pic"]),
+// getters要映射到computed里
+  }
 };
 </script>
 
@@ -108,6 +118,27 @@ export default {
     justify-content: center;
     align-items: center;
   }
+  .user-box {
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  user-select: none;
+  img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #fff;
+    margin-right: 15px;
+    object-fit: cover;
+  }
+  span {
+    color: white;
+    font-size: 12px;
+  }
+}
 }
 
 .avatar {
@@ -118,4 +149,6 @@ export default {
   margin-right: 10px;
   object-fit: cover;
 }
+
+
 </style>
