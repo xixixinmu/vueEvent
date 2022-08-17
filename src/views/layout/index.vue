@@ -58,31 +58,32 @@
           background-color="#23262E"
           text-color="#fff"
           active-text-color="#409EFF"
+          unique-opened
+          router
         >
-          <el-menu-item index="/home">
-            <i class="el-icon-s-home"></i>
-            <span slot="title">首页</span>
-          </el-menu-item>
-          <el-submenu index="/topic">
-            <template slot="title">
-              <i class="el-icon-s-order"></i>
-              <span>文章管理</span>
-            </template>
-            <el-menu-item>
-              <i class="el-icon-s-data"></i>
-              <span>文章分类</span>
+        <!-- 加上router属性 当你点击某行菜单时，以index作为路由切换 -->
+          <template v-for="item in menus">
+            <el-menu-item
+              v-if="!item.children"
+              :index="item.indexPath"
+              :key="item.indexPath"
+            >
+              <i :class="item.icon"></i>
+              <span slot="title">{{ item.title }}</span>
             </el-menu-item>
-            <el-menu-item>
-              <i class="el-icon-document-copy"></i>
-              <span>文章列表</span>
-            </el-menu-item>
-          </el-submenu>
-          <el-submenu>
-            <template slot="title">
-              <i class="el-icon-user-solid"></i>
-              <span>个人中心</span>
-            </template>
-          </el-submenu>
+            <el-submenu :index="item.indexPath" :key="item.indexPath" v-else>
+              <template slot="title">
+                <i :class="item.icon"></i>
+                <span>{{ item.title }}</span>
+              </template>
+              <template v-for="child in item.children">
+                <el-menu-item :key="child.title" :index="child.indexPath">
+                  <i :class="child.icon"></i>
+                  <span>{{ child.title }}</span>
+                </el-menu-item>
+              </template>
+            </el-submenu>
+          </template>
         </el-menu>
       </el-aside>
       <el-container>
@@ -97,13 +98,18 @@
 
 <script>
 import { mapMutations, mapGetters } from "vuex";
-
+import { getMenusAPI } from "@/api/index";
 //经验:在组件标签上绑定的所有事件(包括原生事件的名字click,input等等)//都是自定义事件，都需要组件内$emit来触发才行
 //万一组件内不支持这个原生事件名字
 //解决:@事件名.native="methods里方法名"
 //.native给组件内根标签，绑定这个原生的事件
 export default {
   name: "LayoutPage",
+  data() {
+    return {
+      menus: [],
+    };
+  },
   methods: {
     ...mapMutations(["updateToken", "updateUserInfo"]),
     logoutFn() {
@@ -135,10 +141,17 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
+    async getMenuListFn() {
+      const { data: res } = await getMenusAPI();
+      this.menus = res.data;
+    },
   },
   computed: {
     ...mapGetters(["nickname", "username", "user_pic"]),
     // getters要映射到computed里
+  },
+  created() {
+    this.getMenuListFn();
   },
 };
 </script>
