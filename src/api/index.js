@@ -1,6 +1,4 @@
 import request from "@/utils/request";
-import store from '@/store/index'
-// 导入vuex的store直接获取state里的token
 
 export const registerAPI = ({ username, password, repassword }) => {
   //结构赋值传参，调用这个函数传参可以直接传整个对象
@@ -41,10 +39,6 @@ export const getUsersInfoAPI = () => {
   return request({
     url: "/my/userinfo",
     method: "GET",
-    headers:{
-      Authorization:store.state.token
-    }
-
   });
 };
 
@@ -54,9 +48,7 @@ export const getMenusAPI = () => {
   return request({
     url: "/my/menus",
     method: "GET",
-    headers:{
-      Authorization:store.state.token
-    }
-
   });
 };
+
+
