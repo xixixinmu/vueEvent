@@ -56,9 +56,9 @@ export default {
           // $message为elementUI封装的弹窗
         } else {
           this.$message.success(res.message);
+          this.updateToken(res.token);
           this.$router.push("/layout");
           // 调用mutation中的方法
-          this.updateToken(res.token);
           this.initUserInfo()
         }
       } else {
