@@ -25,6 +25,13 @@ const routes = [
     path: "/layout",
     component: () => import("@/views/layout"),
     // 路由懒加载方式
+    redirect:"/home",
+    children:[
+      {
+        path:'/home',
+        component:()=>import("@/views/home")
+      }
+    ]
   },
 ];
 
