@@ -79,3 +79,17 @@ export const updateUserAvatarAPI = (avatar) => {
     }
   });
 };
+
+export const updateUserPwdAPI = ({old_pwd,new_pwd,re_pwd}) => {
+  //原地是一个Promise对象(内部包含原生ajax请求)
+  // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
+  return request({
+    url: "/my/updatepwd",
+    method: "PATCH",
+    data:{
+      old_pwd,
+      new_pwd,
+      re_pwd
+    }
+  });
+};

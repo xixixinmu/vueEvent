@@ -38,6 +38,10 @@ const routes = [
       {
         path:"/user-avatar",
         component:()=>import("@/views/user-avatar")
+      },
+      {
+        path:"/user-pwd",
+        component:()=>import("@/views/user-pwd")
       }
     ]
   },
