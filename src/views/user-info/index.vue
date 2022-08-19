@@ -4,7 +4,12 @@
       <span>卡片名称</span>
     </div>
     <div>
-      <el-form :model="userInfo" :rules="userInfoRules" label-width="80px" :ref="userInfoRef">
+      <el-form
+        :model="userInfo"
+        :rules="userInfoRules"
+        label-width="80px"
+        ref="userFormRefs"
+      >
         <el-form-item label="登录名称">
           <el-input v-model="userInfo.name" disabled></el-input>
         </el-form-item>
@@ -24,7 +29,7 @@
 </template>
 
 <script>
-
+import { updateUserinfoAPI } from "@/api";
 export default {
   name: "user-info",
   data() {
@@ -50,11 +55,25 @@ export default {
       },
     };
   },
-  methods:{
-    submitChangeFn(){
-      
-    }
-  }
+  methods: {
+    submitChangeFn() {
+      // 通过refs属性获取表单 进行兜底验证 只有通过前端校验才能提交
+      this.$refs.userFormRefs.validate( async (vaild) => {
+        if (vaild) {
+          this.userInfo.id=this.$store.state.userInfo.id
+          // id属性必传  所以从vuex上面取出来 给userinfo加上
+          const {data:res}=await updateUserinfoAPI(this.userInfo)
+          if(res.code!=0) return this.$message.error("更新用户信息失败")
+          this.$message.success(res.message)
+          this.$store.dispatch("initUserInfo")
+          //重新让vuex获取下最新的用户数据
+        } else {
+          return false;
+        }
+      });
+      // console.log(updateUserinfoAPI(this.userInfo));
+    },
+  },
 };
 </script>
 

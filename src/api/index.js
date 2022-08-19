@@ -1,3 +1,4 @@
+import store from "@/store";
 import request from "@/utils/request";
 
 export const registerAPI = ({ username, password, repassword }) => {
@@ -12,7 +13,7 @@ export const registerAPI = ({ username, password, repassword }) => {
     data: {
       username,
       password,
-      repassword
+      repassword,
       // 为了语义明确 不然可以直接传obj
     },
   });
@@ -51,4 +52,18 @@ export const getMenusAPI = () => {
   });
 };
 
-
+export const updateUserinfoAPI = ({id,username,nickname,email,user_pic}) => {
+  //原地是一个Promise对象(内部包含原生ajax请求)
+  // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
+  return request({
+    url: "/my/userinfo",
+    method: "PUT",
+    data: {
+      id,
+      username,
+      nickname,
+      email,
+      user_pic
+    },
+  });
+};
