@@ -15,7 +15,7 @@
         <el-submenu index="1">
           <template slot="title">
             <!-- 头像 -->
-            <img src="@/assets/logo.png" alt="" class="avatar" />
+            <img :src="$store.state.userInfo.user_pic" alt="" class="avatar" />
             <span>个人中心</span>
           </template>
           <el-menu-item index="1-1"

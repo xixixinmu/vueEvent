@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { updateUserAvatarAPI } from "@/api";
 export default {
   name: "user-avatar",
   data() {
@@ -39,7 +40,16 @@ export default {
       //解决:移花接木
       this.$refs.iptRef.click();
     },
-    updateAvatarFn() {},
+    async updateAvatarFn() {
+      const { data: res } = await updateUserAvatarAPI(this.newAvatar);
+      if (res.code == 0) {
+        this.$store.dispatch("initUserInfo");
+        // 因为添加了头像信息  从后台重新获取用户信息
+        this.$message.success(res.message);
+      } else {
+        return this.$message.error(res.message);
+      }
+    },
     onFileChange(e) {
       const file = e.target.files;
       if (file.length == 0) {
@@ -62,7 +72,7 @@ export default {
         // 1. 创建 FileReader 对象
         const fr = new FileReader();
         // 2. 调用 readAsDataURL 函数，读取文件内容
-        fr.readAsDataURL(files[0]);
+        fr.readAsDataURL(file[0]);
         // 3. 监听 fr 的 onload 事件
         fr.onload = (e) => {
           // 4. 通过 e.target.result 获取到读取的结果，值是字符串（base64 格式的字符串）
