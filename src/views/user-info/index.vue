@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <div slot="header">
-      <span>卡片名称</span>
+      <span>修改个人信息</span>
     </div>
     <div>
       <el-form
@@ -21,7 +21,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitChangeFn">提交修改</el-button>
-          <el-button>重置</el-button>
+          <el-button @click="resetFn">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -71,8 +71,11 @@ export default {
           return false;
         }
       });
-      // console.log(updateUserinfoAPI(this.userInfo));
     },
+    resetFn(){
+      this.userInfo.nickname=""
+      this.userInfo.email=""
+    }
   },
 };
 </script>
