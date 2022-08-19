@@ -51,7 +51,7 @@
              active-text-color:哪项index的值和default-active一致，就会被设置动态文字颜色
          -->
         <el-menu
-          default-active="/home"
+          :default-active="$route.path"
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"
