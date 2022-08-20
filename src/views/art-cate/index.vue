@@ -27,8 +27,16 @@
       title="添加文章分类"
       :visible.sync="addVisible"
       width="35%"
+      @closed="onAddClosedFn"
     >
-      <span>这是一段信息</span>
+      <el-form label-width="80px" :model="addCateForm" ref="addRef">
+        <el-form-item label="分类名称" prop="cate_name">
+          <el-input v-model="addCateForm.cate_name"></el-input>
+        </el-form-item>
+        <el-form-item label="分类别名" prop="cate_alias">
+          <el-input v-model="addCateForm.cate_alias"></el-input>
+        </el-form-item>
+      </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="addVisible = false">取 消</el-button>
         <el-button size="mini" type="primary" @click="confirmFn"
@@ -47,23 +55,60 @@ export default {
     return {
       cateList: [],
       addVisible: false,
+      addCateForm: {
+        cate_name: "",
+        cate_alias: "",
+      },
+      addRules: {
+        // 添加表单的验证规则对象
+        cate_name: [
+          { required: true, message: "请输入分类名称", trigger: "blur" },
+          {
+            pattern: /^\S{1,10}$/,
+            message: "分类名必须是1-10位的非空字符",
+            trigger: "blur",
+          },
+        ],
+        cate_alias: [
+          { required: true, message: "请输入分类别名", trigger: "blur" },
+          {
+            pattern: /^[a-zA-Z0-9]{1,15}$/,
+            message: "分类别名必须是1-15位的字母数字",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   methods: {
     async getCateList() {
       const { data: res } = await getCateListAPI();
-      console.log(res.data);
       if (res.code !== 0) return this.$message.error(res.message);
       this.cateList = res.data;
     },
-     addCateList() {
+    addCateList() {
       this.addVisible = true;
     },
-    async confirmFn(){
-      const { data: res } = await createCateListAPI(this.cateList);
-      console.log(res);
-      this.addVisible = false
-    }
+    confirmFn() {
+      // 表单预校验
+      this.$refs.addRef.validate(async (valid) => {
+        if (valid) {
+          // 调用接口传递数据给后台
+          const { data: res } = await createCateListAPI(this.addCateForm);
+          if (res.code !== 0) return this.$message.error("添加分类失败！");
+          this.$message.success("添加分类成功！");
+          // 重新请求列表数据
+          this.getCateList();
+          // 关闭对话框
+          this.addVisible = false;
+        } else {
+          return false;
+        }
+      });
+    },
+    onAddClosedFn() {
+      this.$refs.addRef.resetFields();
+    },
   },
   mounted() {
     this.getCateList();

@@ -110,7 +110,7 @@ export const createCateListAPI = ({cate_name,cate_alias}) => {
   return request({
     url: "/my/cate/add",
     method: "POST",
-    body:{
+    data:{
       cate_name,
       cate_alias
     }
