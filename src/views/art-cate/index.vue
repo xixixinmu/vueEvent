@@ -17,8 +17,15 @@
         <el-table-column label="分类名称" prop="cate_name"></el-table-column>
         <el-table-column label="分类别名" prop="cate_alias"></el-table-column>
         <el-table-column label="操作">
-          <el-button type="primary" size="mini">修改</el-button>
-          <el-button type="danger" size="mini">删除</el-button>
+          <!-- scope对象：{row:行对象} -->
+          <!-- 作用域插槽 -->
+          <template v-slot="scope">
+            <!-- 将参数scope.row直接传进函数获取点击的那项 -->
+            <el-button type="primary" size="mini" @click="changeCate(scope.row)"
+              >修改</el-button
+            >
+            <el-button type="danger" size="mini">删除</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </el-card>
@@ -40,7 +47,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="addVisible = false">取 消</el-button>
         <el-button size="mini" type="primary" @click="confirmFn"
-          >添 加</el-button
+          >确 定</el-button
         >
       </span>
     </el-dialog>
@@ -48,7 +55,17 @@
 </template>
 
 <script>
-import { getCateListAPI, createCateListAPI } from "@/api";
+//经验:如果用同一个按钮，想要做状态区分
+//1.定义一个标记变量isEdit (true编辑，false新增)，还要定义本次要编辑的数据唯一id值,editId// 2．在点击修改的时候，isEdit改为true,editId保存要修改的数据id
+// 3．在点击新增按钮的时候，isEdit改为false, editId置空
+// 4．在点击保存按钮时(确定按钮时)，就可以用isEdit变量做区分了
+
+import {
+  getCateListAPI,
+  createCateListAPI,
+  getCateAPI,
+  changeCateAPI,
+} from "@/api";
 export default {
   name: "art-cate",
   data() {
@@ -78,25 +95,45 @@ export default {
           },
         ],
       },
+      isEdit: false,
+      editId: "",
     };
   },
   methods: {
+    // 获取文章分类信息
     async getCateList() {
       const { data: res } = await getCateListAPI();
       if (res.code !== 0) return this.$message.error(res.message);
       this.cateList = res.data;
     },
+    // 点击添加分类按钮
     addCateList() {
+      this.isEdit = false; //变回新增状态标记
+      this.editId = "";
       this.addVisible = true;
     },
+    // 点击确定按钮新增或者修改 标志位为isEdit
     confirmFn() {
       // 表单预校验
       this.$refs.addRef.validate(async (valid) => {
         if (valid) {
           // 调用接口传递数据给后台
-          const { data: res } = await createCateListAPI(this.addCateForm);
-          if (res.code !== 0) return this.$message.error("添加分类失败！");
-          this.$message.success("添加分类成功！");
+          if (this.isEdit) {
+            const { data: res } = await changeCateAPI({
+              id: this.editId,
+              ...this.addCateForm,
+            });
+            // id是不在addCateForm的属性 要分开传 这样写就行
+            if (res.code !== 0) return this.$message.error("更新分类失败！");
+            this.$message.success("更新分类成功！");
+            this.isEdit = false;
+            this.editId = null;
+          } else {
+            const { data: res } = await createCateListAPI(this.addCateForm);
+            if (res.code !== 0) return this.$message.error("添加分类失败！");
+            this.$message.success("添加分类成功！");
+          }
+
           // 重新请求列表数据
           this.getCateList();
           // 关闭对话框
@@ -106,10 +143,27 @@ export default {
         }
       });
     },
+    // 重置按钮 把表单清空
     onAddClosedFn() {
       this.$refs.addRef.resetFields();
     },
+    // 修改文章分类名称按钮
+    async changeCate(row) {
+      this.isEdit = true;
+      this.editId = row.id;
+      const { data: res } = await getCateAPI(this.editId);
+      //   通过id获取cate_name cate_alias后渲染到表单里
+      if (res.code == 0) {
+        this.addCateForm.cate_name = res.data.cate_name;
+        this.addCateForm.cate_alias = res.data.cate_alias;
+        console.log(this.addCateForm);
+        this.addVisible = true;
+      } else {
+        return this.$message.error(res.message);
+      }
+    },
   },
+//   在挂载时或者created里获取文章分类的信息 调用上面写的方法
   mounted() {
     this.getCateList();
   },
