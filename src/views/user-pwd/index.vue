@@ -36,6 +36,22 @@ import { updateUserPwdAPI } from "@/api";
 export default {
   name: "user-pwd",
   data() {
+    // 新旧密码不能相同
+    const samePwd=(rules,value,callback)=>{
+      // value就是校验规则所对应输入框值(新密码)
+      if(this.pwdForm.old_pwd==value){
+        callback(new Error("新密码不能与原密码相同")) 
+      }else{
+        callback()
+      }
+    }
+    const rePwd=(rules,value,callback)=>{
+      if(this.pwdForm.new_pwd===value){
+        callback()
+      }else{
+        callback(new Error("两次输入密码不一致"))
+      }
+    }
     return {
       pwdRules: {
         old_pwd: [
@@ -53,6 +69,7 @@ export default {
             message: "密码长度必须是6-15位的非空字符串",
             trigger: "blur",
           },
+          { validator: samePwd, trigger: "blur" },
         ],
         re_pwd: [
           { required: true, message: "请再次确认新密码", trigger: "blur" },
@@ -61,6 +78,7 @@ export default {
             message: "密码长度必须是6-15位的非空字符串",
             trigger: "blur",
           },
+          { validator: rePwd, trigger: "blur" },
         ],
       },
       pwdForm: {
@@ -76,10 +94,10 @@ export default {
         if (valid) {
           const { data: res } = await updateUserPwdAPI(this.pwdForm);
           if (res.code == 0) {
-            this.$message.success(res.message)
+            this.$message.success(res.message);
             this.$store.dispatch("initUserInfo");
-          }else{
-            this.$message.error(res.message)
+          } else {
+            this.$message.error(res.message);
           }
         } else {
           return false;
@@ -87,9 +105,9 @@ export default {
       });
     },
     resetPwd() {
-      this.pwdForm.old_pwd="",
-      this.pwdForm.new_pwd="",
-      this.pwdForm.re_pwd=""
+      (this.pwdForm.old_pwd = ""),
+        (this.pwdForm.new_pwd = ""),
+        (this.pwdForm.re_pwd = "");
     },
   },
 };
