@@ -23,11 +23,17 @@
       </el-table>
     </el-card>
     <!-- 添加分类的对话框 -->
-    <el-dialog title="添加文章分类" :visible.sync="addVisible" width="35%">
+    <el-dialog
+      title="添加文章分类"
+      :visible.sync="addVisible"
+      width="35%"
+    >
       <span>这是一段信息</span>
       <span slot="footer" class="dialog-footer">
-        <el-button size="mini">取 消</el-button>
-        <el-button size="mini" type="primary">添 加</el-button>
+        <el-button size="mini" @click="addVisible = false">取 消</el-button>
+        <el-button size="mini" type="primary" @click="confirmFn"
+          >添 加</el-button
+        >
       </span>
     </el-dialog>
   </div>
@@ -40,6 +46,7 @@ export default {
   data() {
     return {
       cateList: [],
+      addVisible: false,
     };
   },
   methods: {
@@ -49,10 +56,14 @@ export default {
       if (res.code !== 0) return this.$message.error(res.message);
       this.cateList = res.data;
     },
-    async addCateList() {
-      const { data: res } = await createCateListAPI("历史", "lishi");
-      console.log(res);
+     addCateList() {
+      this.addVisible = true;
     },
+    async confirmFn(){
+      const { data: res } = await createCateListAPI(this.cateList);
+      console.log(res);
+      this.addVisible = false
+    }
   },
   mounted() {
     this.getCateList();
