@@ -96,6 +96,7 @@ export default {
           if (res.code == 0) {
             this.$message.success(res.message);
             this.$store.dispatch("initUserInfo");
+            this.$refs.pwdRef.resetFields()
           } else {
             this.$message.error(res.message);
           }
@@ -105,9 +106,11 @@ export default {
       });
     },
     resetPwd() {
-      (this.pwdForm.old_pwd = ""),
-        (this.pwdForm.new_pwd = ""),
-        (this.pwdForm.re_pwd = "");
+      // (this.pwdForm.old_pwd = ""),
+      //   (this.pwdForm.new_pwd = ""),
+      //   (this.pwdForm.re_pwd = "");
+      this.$refs.pwdRef.resetFields()
+      // 重置表单内容 比我自己写的简单
     },
   },
 };

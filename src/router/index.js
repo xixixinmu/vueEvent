@@ -42,6 +42,10 @@ const routes = [
       {
         path:"/user-pwd",
         component:()=>import("@/views/user-pwd")
+      },
+      {
+        path:"/art-cate",
+        component:()=>import("@/views/art-cate")
       }
     ]
   },

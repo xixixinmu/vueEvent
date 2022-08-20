@@ -93,3 +93,26 @@ export const updateUserPwdAPI = ({old_pwd,new_pwd,re_pwd}) => {
     }
   });
 };
+
+
+export const getCateListAPI = () => {
+  //原地是一个Promise对象(内部包含原生ajax请求)
+  // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
+  return request({
+    url: "/my/cate/list",
+    method: "GET",
+  });
+};
+
+export const createCateListAPI = (cate_name,cate_alias) => {
+  //原地是一个Promise对象(内部包含原生ajax请求)
+  // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
+  return request({
+    url: "/my/cate/add",
+    method: "POST",
+    body:{
+      cate_name,
+      cate_alias
+    }
+  });
+};
