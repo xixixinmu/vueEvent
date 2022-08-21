@@ -158,11 +158,23 @@ export default {
 </script>
 
 <style lang="less" scoped>
+// scoped原理: webpack打包的时候，会给组件标签上添加相同data-v-hash值，
+// 然后也会给所有选择器后面加上一个[data-v-hash]值的属性选择器
+//<标签data-v-390246 class="my_a"></标签>
+//选择器会变成.my_a[data-v-390246]
+
 // 设置富文本编辑器的默认最小高度
 // ::v-deep作用: 穿透选择, 正常style上加了scope的话, 会给.ql-editor[data-v-hash]属性, 只能选择当前页面标签或者组件的根标签
 // 如果想要选择组件内的标签(那些标签没有data-v-hash值)所以正常选择选不中, 加了::v-deep空格前置的话, 选择器就会变成如下形式
 // [data-v-hash] .ql-editor 这样就能选中组件内的标签的class类名了
-:v-deep(.ql-editor) {
+//重要注意事项: scoped只会给当前组件所有原生标签添加data-v-hash值属性，还会给组件标签内根标签添加data-v-hash值性,组件内的标签不会添加
+// 里面的没被添加v-data-hash就不会起作用
+
+::v-deep .ql-editor {
+  //最小高度:标签本身的高度靠内容撑开，但是无内容没有300高度，标签会设置最小高度为300pX
+  //如果内容大于300px,,标签高度也会随着撑开(比300px大) 4rem,4rem
+  //直接给height:那么无论容器内的内容有多少，超出300高度的内容会溢出到外面而不是撑开此容器
+
   min-height: 300px;
 }
 </style>
