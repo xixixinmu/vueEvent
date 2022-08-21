@@ -72,6 +72,9 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="文章内容" prop="content">
+          <quill-editor v-model="pubForm.content"></quill-editor>
+        </el-form-item>
       </el-form>
     </el-dialog>
   </div>
@@ -90,8 +93,9 @@ export default {
       pubDialogVisible: false,
       pubForm: {
         // 表单的数据对象
-        title: "",
-        cate_id: "",
+        title: "", //文章标题
+        cate_id: "", //文章分类id
+        content: "", //文章内容
       },
       pubFormRules: {
         // 表单的验证规则对象
@@ -105,7 +109,10 @@ export default {
           },
         ],
         cate_id: [
-          { required: true, message: "请选择文章标题", trigger: "blur" },
+          { required: true, message: "请输入文章标题", trigger: "blur" },
+        ],
+        content: [
+          { required: true, message: "请输入文章内容", trigger: "blur" },
         ],
       },
       cateFrom: [],
@@ -151,4 +158,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+// 设置富文本编辑器的默认最小高度
+// ::v-deep作用: 穿透选择, 正常style上加了scope的话, 会给.ql-editor[data-v-hash]属性, 只能选择当前页面标签或者组件的根标签
+// 如果想要选择组件内的标签(那些标签没有data-v-hash值)所以正常选择选不中, 加了::v-deep空格前置的话, 选择器就会变成如下形式
+// [data-v-hash] .ql-editor 这样就能选中组件内的标签的class类名了
+:v-deep(.ql-editor) {
+  min-height: 300px;
+}
 </style>
