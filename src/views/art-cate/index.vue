@@ -154,19 +154,30 @@ export default {
       const { data: res } = await getCateAPI(this.editId);
       //   通过id获取cate_name cate_alias后渲染到表单里
       if (res.code == 0) {
-        this.addCateForm.cate_name = res.data.cate_name;
-        this.addCateForm.cate_alias = res.data.cate_alias;
-        console.log(this.addCateForm);
         this.addVisible = true;
+        //让el-dialog第一次挂载el-form时，先用addForm空字符串初始值绑定到内部，后续用作resetFields重置
+        //所以让真实DOM先创建并在内部绑定好"复制"好初始值 
+        this.$nextTick(() => {
+          this.addCateForm.cate_name = res.data.cate_name;
+          this.addCateForm.cate_alias = res.data.cate_alias;
+        });
       } else {
         return this.$message.error(res.message);
       }
     },
   },
-//   在挂载时或者created里获取文章分类的信息 调用上面写的方法
+  //   在挂载时或者created里获取文章分类的信息 调用上面写的方法
   mounted() {
     this.getCateList();
   },
+  //小bug: (el-form和el-dialog和数据回显同时用，有bug)
+  //复现:第一次打开网页，先点击修改，再点击新增，发现输入框竟然有值
+  //原因:点击修改后，关闭对话框的时候，置空失效了
+  //具体分析:主人公resetFields有问题
+  //线索:Dialog 的内容是懒渲染的，即在第一次被打开之前，传入的默认slot不会被渲染到 DOM 上
+  //线索:vue数据改变(先执行同步所有)再去更新DOM(异步代码)
+  //无问题:第一次打开网页，先点击新增按钮-> dialog出现-〉 el-fonrm组件第一次挂载（关联的addForm对象的属性的值为空字符串) el-form组件内绑定了初始值，所以后续调用resetFields的时候，它可以用到空字符串初始值来重置
+  //有问题:第一次打开网页，先点击修改按钮-〉虽然dialog变量为true了但是同步代码把addForm对象里赋值了(默认值)->DOMN更新异步-〉 dialog出现-〉 el-form组件第一次挂载(使用addForm内置做回显然后第一次el-fonm内绑定了初始值(有值))->以后做重置，它就用绑定的带值的做重置
 };
 </script>
 
