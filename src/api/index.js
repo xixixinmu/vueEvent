@@ -52,7 +52,13 @@ export const getMenusAPI = () => {
   });
 };
 
-export const updateUserinfoAPI = ({id,username,nickname,email,user_pic}) => {
+export const updateUserinfoAPI = ({
+  id,
+  username,
+  nickname,
+  email,
+  user_pic,
+}) => {
   //原地是一个Promise对象(内部包含原生ajax请求)
   // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
   return request({
@@ -63,7 +69,7 @@ export const updateUserinfoAPI = ({id,username,nickname,email,user_pic}) => {
       username,
       nickname,
       email,
-      user_pic
+      user_pic,
     },
   });
 };
@@ -74,46 +80,44 @@ export const updateUserAvatarAPI = (avatar) => {
   return request({
     url: "/my/update/avatar",
     method: "PATCH",
-    data:{
-      avatar
-    }
+    data: {
+      avatar,
+    },
   });
 };
 
-export const updateUserPwdAPI = ({old_pwd,new_pwd,re_pwd}) => {
+export const updateUserPwdAPI = ({ old_pwd, new_pwd, re_pwd }) => {
   //原地是一个Promise对象(内部包含原生ajax请求)
   // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
   return request({
     url: "/my/updatepwd",
     method: "PATCH",
-    data:{
+    data: {
       old_pwd,
       new_pwd,
-      re_pwd
-    }
+      re_pwd,
+    },
   });
 };
 
-
 export const getCateListAPI = () => {
-  //原地是一个Promise对象(内部包含原生ajax请求)
-  // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
+  // 获取文章分类API
   return request({
     url: "/my/cate/list",
     method: "GET",
   });
 };
 
-export const createCateListAPI = ({cate_name,cate_alias}) => {
+export const createCateListAPI = ({ cate_name, cate_alias }) => {
   //原地是一个Promise对象(内部包含原生ajax请求)
   // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
   return request({
     url: "/my/cate/add",
     method: "POST",
-    data:{
+    data: {
       cate_name,
-      cate_alias
-    }
+      cate_alias,
+    },
   });
 };
 
@@ -122,22 +126,51 @@ export const getCateAPI = (id) => {
   // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
   return request({
     url: "/my/cate/info",
-    params:{
-      id
-    }
+    params: {
+      id,
+    },
   });
 };
 
-export const changeCateAPI = ({id,cate_name,cate_alias}) => {
+export const changeCateAPI = ({ id, cate_name, cate_alias }) => {
   //原地是一个Promise对象(内部包含原生ajax请求)
   // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
   return request({
     url: "/my/cate/info",
     method: "PUT",
-    data:{
+    data: {
       id,
       cate_name,
-      cate_alias
-    }
+      cate_alias,
+    },
+  });
+};
+
+/**
+ * 删除-文章分类
+ * @param {*} id 要删除的-文章分类id
+ * @returns Promise对象
+ */
+export const delArtCateAPI = (id) => {
+  return request({
+    url: "/my/cate/del",
+    method: "DELETE",
+    params: {
+      id,
+    },
+  });
+};
+
+export const addArtAPI = ({ title, cate_id, content, cover_img, state }) => {
+  return request({
+    url: "/my/article/add",
+    method: "POST",
+    data: {
+      title,
+      cate_id,
+      content,
+      cover_img,
+      state,
+    },
   });
 };

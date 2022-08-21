@@ -24,7 +24,9 @@
             <el-button type="primary" size="mini" @click="changeCate(scope.row)"
               >修改</el-button
             >
-            <el-button type="danger" size="mini">删除</el-button>
+            <el-button type="danger" size="mini" @click="removeFn(scope.row.id)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -65,6 +67,7 @@ import {
   createCateListAPI,
   getCateAPI,
   changeCateAPI,
+  delArtCateAPI
 } from "@/api";
 export default {
   name: "art-cate",
@@ -156,7 +159,7 @@ export default {
       if (res.code == 0) {
         this.addVisible = true;
         //让el-dialog第一次挂载el-form时，先用addForm空字符串初始值绑定到内部，后续用作resetFields重置
-        //所以让真实DOM先创建并在内部绑定好"复制"好初始值 
+        //所以让真实DOM先创建并在内部绑定好"复制"好初始值
         this.$nextTick(() => {
           this.addCateForm.cate_name = res.data.cate_name;
           this.addCateForm.cate_alias = res.data.cate_alias;
@@ -164,6 +167,14 @@ export default {
       } else {
         return this.$message.error(res.message);
       }
+    },
+    // 删除-文章分类
+    async removeFn(id) {
+      const { data: res } = await delArtCateAPI(id);
+      if (res.code !== 0) return this.$message.error("删除分类失败！");
+      this.$message.success("删除分类成功！");
+      // 重新请求列表数据
+      this.getCateList();
     },
   },
   //   在挂载时或者created里获取文章分类的信息 调用上面写的方法
@@ -176,8 +187,8 @@ export default {
   //具体分析:主人公resetFields有问题
   //线索:Dialog 的内容是懒渲染的，即在第一次被打开之前，传入的默认slot不会被渲染到 DOM 上
   //线索:vue数据改变(先执行同步所有)再去更新DOM(异步代码)
-  //无问题:第一次打开网页，先点击新增按钮-> dialog出现-〉 el-fonrm组件第一次挂载（关联的addForm对象的属性的值为空字符串) el-form组件内绑定了初始值，所以后续调用resetFields的时候，它可以用到空字符串初始值来重置
-  //有问题:第一次打开网页，先点击修改按钮-〉虽然dialog变量为true了但是同步代码把addForm对象里赋值了(默认值)->DOMN更新异步-〉 dialog出现-〉 el-form组件第一次挂载(使用addForm内置做回显然后第一次el-fonm内绑定了初始值(有值))->以后做重置，它就用绑定的带值的做重置
+  //无问题:第一次打开网页，先点击新增按钮-> dialog出现-〉 el-from组件第一次挂载（关联的addForm对象的属性的值为空字符串) el-form组件内绑定了初始值，所以后续调用resetFields的时候，它可以用到空字符串初始值来重置
+  //有问题:第一次打开网页，先点击修改按钮-〉虽然dialog变量为true了但是同步代码把addForm对象里赋值了(默认值)->DOM更新异步-〉 dialog出现-〉 el-form组件第一次挂载(使用addForm内置做回显然后第一次el-fonm内绑定了初始值(有值))->以后做重置，它就用绑定的带值的做重置
 };
 </script>
 

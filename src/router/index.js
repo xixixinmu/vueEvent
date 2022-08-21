@@ -46,6 +46,10 @@ const routes = [
       {
         path:"/art-cate",
         component:()=>import("@/views/art-cate")
+      },
+      {
+        path:"/art-list",
+        component:()=>import("@/views/art-list")
       }
     ]
   },
