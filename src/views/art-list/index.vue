@@ -47,6 +47,7 @@
       :visible.sync="pubDialogVisible"
       fullscreen
       :before-close="handleClose"
+      @close="dialogCloseFn"
     >
       <!-- 发布文章的对话框 -->
       <el-form
@@ -73,9 +74,12 @@
           </el-select>
         </el-form-item>
         <el-form-item label="文章内容" prop="content">
-          <quill-editor v-model="pubForm.content" @change="contentChangeFn"></quill-editor>
+          <quill-editor
+            v-model="pubForm.content"
+            @blur="contentChangeFn"
+          ></quill-editor>
         </el-form-item>
-        <el-form-item label="文章封面">
+        <el-form-item label="文章封面" prop="cover_img">
           <!-- 用来显示封面的图片 -->
           <img src="@/assets/cover.jpg" class="cover-img" ref="imgRef" />
           <br />
@@ -143,6 +147,9 @@ export default {
           //自己来给quill-editor绑定change事件(在文档里查到的它支持change事件内容改变事件)
           { required: true, message: "请输入文章内容", trigger: "blur" },
         ],
+        cover_img: [
+          { required: true, message: "请选择文章封面", trigger: "blur" },
+        ],
       },
       cateFrom: [],
     };
@@ -192,20 +199,38 @@ export default {
         const url = URL.createObjectURL(files[0]);
         this.$refs.imgRef.setAttribute("src", url);
       }
+      this.$refs.pubFormRef.validateField("cover_img");
     },
     // 发布或存为草稿
     pubArticleFn(str) {
       this.$refs.pubFormRef.validate(async (valid) => {
         if (valid) {
           this.pubForm.state = str;
-          const { data: res } = await addArticleAPI(this.pubForm);
+          // const { data: res } = await addArticleAPI(this.pubForm);
+          // console.log(res);
+          const fd = new FormData(); //准备一个表单数据对象的容器，FormData类是HTML5新出的专门为了装文件内容的一个容器
+          // fd.append("参数名"，值)
+          fd.append("title", this.pubForm.title);
+          fd.append("cate_id", this.pubForm.cate_id);
+          fd.append("content", this.pubForm.content);
+          fd.append("cover_img", this.pubForm.cover_img);
+          fd.append("state", this.pubForm.state);
+          const { data: res } = await addArticleAPI(fd);
           console.log(res);
+          if (res.code !== 0) return this.$message.error("发布文章失败！");
+          this.$message.success("发布文章成功！");
         } else return false;
       });
     },
     //富文本编辑器内容改变触发此事件方法
-    contentChangeFn(){
-      this.$refs.pubFormRef.validateField("content")
+    contentChangeFn() {
+      this.$refs.pubFormRef.validateField("content");
+    },
+    // 新增文章的对话框关闭后清空表单
+    dialogCloseFn(){
+      this.$refs.pubFormRef.resetFields()
+      // 手动给封面标签清空
+      this.$refs.imgRef.setAttribute("src", defaultImg);
     }
   },
   created() {

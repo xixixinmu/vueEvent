@@ -109,8 +109,6 @@ export const getCateListAPI = () => {
 };
 
 export const createCateListAPI = ({ cate_name, cate_alias }) => {
-  //原地是一个Promise对象(内部包含原生ajax请求)
-  // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
   return request({
     url: "/my/cate/add",
     method: "POST",
@@ -122,8 +120,6 @@ export const createCateListAPI = ({ cate_name, cate_alias }) => {
 };
 
 export const getCateAPI = (id) => {
-  //原地是一个Promise对象(内部包含原生ajax请求)
-  // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
   return request({
     url: "/my/cate/info",
     params: {
@@ -133,8 +129,7 @@ export const getCateAPI = (id) => {
 };
 
 export const changeCateAPI = ({ id, cate_name, cate_alias }) => {
-  //原地是一个Promise对象(内部包含原生ajax请求)
-  // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
+
   return request({
     url: "/my/cate/info",
     method: "PUT",
@@ -161,16 +156,13 @@ export const delArtCateAPI = (id) => {
   });
 };
 
-export const addArticleAPI = ({ title, cate_id, content, cover_img, state }) => {
+export const addArticleAPI = (fd) => {
+  //如果是一个普通对象，axios会把它转成JSON字符串在请求里体里交给后台
+  //这个接口文档要求请求体里是一个FormData类型(表单数据对象)携带文件给后台
+
   return request({
     url: "/my/article/add",
     method: "POST",
-    data: {
-      title,
-      cate_id,
-      content,
-      cover_img,
-      state,
-    },
+    data: fd
   });
 };
