@@ -66,7 +66,7 @@
           >
             <el-option
               :label="obj.cate_name"
-              :value="obj.cate_id"
+              :value="obj.id"
               v-for="obj in cateFrom"
               :key="obj.id"
             ></el-option>
@@ -75,13 +75,41 @@
         <el-form-item label="文章内容" prop="content">
           <quill-editor v-model="pubForm.content"></quill-editor>
         </el-form-item>
+        <el-form-item label="文章封面">
+          <!-- 用来显示封面的图片 -->
+          <img
+            src="@/assets/cover.jpg"
+            class="cover-img"
+            ref="imgRef"
+          />
+          <br />
+          <!-- 文件选择框，默认被隐藏 -->
+          <input
+            type="file"
+            style="display: none"
+            accept="image/*"
+            ref="iptFileRef"
+            @change="changeCover"
+          />
+          <!-- 选择封面的按钮 -->
+          <el-button type="text" @click="selCover">+ 选择封面</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="pubArticleFn('已发布')"
+            >发布</el-button
+          >
+          <el-button type="info" @click="pubArticleFn('草稿')"
+            >存为草稿</el-button
+          >
+        </el-form-item>
       </el-form>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getCateListAPI } from "@/api";
+import { getCateListAPI,addArticleAPI } from "@/api";
+import defaultImg from '@/assets/cover.jpg'
 export default {
   name: "art-list",
   data() {
@@ -96,6 +124,8 @@ export default {
         title: "", //文章标题
         cate_id: "", //文章分类id
         content: "", //文章内容
+        cover_img: "", //文章封面
+        state: "", //文章状态 草稿或已发布
       },
       pubFormRules: {
         // 表单的验证规则对象
@@ -109,7 +139,7 @@ export default {
           },
         ],
         cate_id: [
-          { required: true, message: "请输入文章标题", trigger: "blur" },
+          { required: true, message: "请选择文章分类", trigger: "change" },
         ],
         content: [
           { required: true, message: "请输入文章内容", trigger: "blur" },
@@ -150,6 +180,30 @@ export default {
       const { data: res } = await getCateListAPI();
       this.cateFrom = res.data;
     },
+    selCover() {
+      this.$refs.iptFileRef.click();
+    },
+    changeCover(e) {
+      const files = e.target.files;
+      if (files.length === 0) {
+        this.pubForm.cover_img = null;
+        this.$refs.imgRef.setAttribute('src', defaultImg)
+      } else {
+        this.pubForm.cover_img = files[0];
+        const url = URL.createObjectURL(files[0]);
+        this.$refs.imgRef.setAttribute('src', url)
+      }
+    },
+    // 发布或存为草稿
+    pubArticleFn(str){
+        this.$refs.pubFormRef.validate(async valid=>{
+          if(valid){
+            this.pubForm.state=str
+            const {data:res}=await addArticleAPI(this.pubForm)
+            console.log(res)
+          }else return false
+        })
+    }
   },
   created() {
     this.getCateData();
@@ -176,5 +230,12 @@ export default {
   //直接给height:那么无论容器内的内容有多少，超出300高度的内容会溢出到外面而不是撑开此容器
 
   min-height: 300px;
+}
+
+// 设置图片封面的宽高
+.cover-img {
+  width: 400px;
+  height: 280px;
+  object-fit: cover;
 }
 </style>

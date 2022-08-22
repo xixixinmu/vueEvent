@@ -15,11 +15,9 @@
       />
       <!-- 用于打开选择图片的 因为是原生的样式不好改 所以在elbutton里面获取该节点 -->
       <el-button type="primary" icon="el-icon-plus" @click="selectAvatarFn"
-        >选择图片</el-button
-      >
+        >选择图片</el-button>
       <el-button type="success" icon="el-icon-upload" @click="updateAvatarFn"
-        >上传头像</el-button
-      >
+        >上传头像</el-button>
     </div>
   </el-card>
 </template>
@@ -35,7 +33,7 @@ export default {
   },
   methods: {
     selectAvatarFn() {
-      //目的:为了让input[type=file]标签，让他再用S代码来触发它的点击事件(导致它默认行为给一个文件选择窗口)
+      //目的:为了让input[type=file]标签，让他再用代码来触发它的点击事件(导致它默认行为给一个文件选择窗口)
       //原因:input[type=file]它是原生标签,样式不太好改
       //解决:移花接木
       this.$refs.iptRef.click();

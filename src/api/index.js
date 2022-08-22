@@ -161,7 +161,7 @@ export const delArtCateAPI = (id) => {
   });
 };
 
-export const addArtAPI = ({ title, cate_id, content, cover_img, state }) => {
+export const addArticleAPI = ({ title, cate_id, content, cover_img, state }) => {
   return request({
     url: "/my/article/add",
     method: "POST",
