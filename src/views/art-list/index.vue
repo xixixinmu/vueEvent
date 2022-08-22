@@ -38,6 +38,13 @@
               >发表文章</el-button
             >
           </el-form-item>
+          <el-table :data="artList" style="width: 100%" border stripe>
+            <el-table-column label="文章标题" prop="title"></el-table-column>
+            <el-table-column label="分类" prop="cate_name"></el-table-column>
+            <el-table-column label="发表时间" prop="pub_date"></el-table-column>
+            <el-table-column label="状态" prop="state"></el-table-column>
+            <el-table-column label="操作"></el-table-column>
+          </el-table>
         </el-form>
       </div>
     </el-card>
@@ -108,7 +115,7 @@
 </template>
 
 <script>
-import { getCateListAPI, addArticleAPI } from "@/api";
+import { getCateListAPI, addArticleAPI, getArticleListAPI } from "@/api";
 import defaultImg from "@/assets/cover.jpg";
 export default {
   name: "art-list",
@@ -152,6 +159,14 @@ export default {
         ],
       },
       cateFrom: [],
+      artList: [], // 文章的列表数据
+      total: 0, // 总数据条数
+      q: {
+        pagenum: 1, //默认拿第一页的数据
+        pagesize: 2, //当前页需要几条数据
+        cate_id: "", //分类id
+        state: "", //状态
+      },
     };
   },
   methods: {
@@ -206,8 +221,6 @@ export default {
       this.$refs.pubFormRef.validate(async (valid) => {
         if (valid) {
           this.pubForm.state = str;
-          // const { data: res } = await addArticleAPI(this.pubForm);
-          // console.log(res);
           const fd = new FormData(); //准备一个表单数据对象的容器，FormData类是HTML5新出的专门为了装文件内容的一个容器
           // fd.append("参数名"，值)
           fd.append("title", this.pubForm.title);
@@ -219,6 +232,10 @@ export default {
           console.log(res);
           if (res.code !== 0) return this.$message.error("发布文章失败！");
           this.$message.success("发布文章成功！");
+          this.pubDialogVisible=false
+          // 关闭对话框
+          this.initArtListFn();
+          // 发布后重新获取文章数据
         } else return false;
       });
     },
@@ -227,14 +244,22 @@ export default {
       this.$refs.pubFormRef.validateField("content");
     },
     // 新增文章的对话框关闭后清空表单
-    dialogCloseFn(){
-      this.$refs.pubFormRef.resetFields()
+    dialogCloseFn() {
+      this.$refs.pubFormRef.resetFields();
       // 手动给封面标签清空
       this.$refs.imgRef.setAttribute("src", defaultImg);
-    }
+    },
+    // 初始化文章列表
+    async initArtListFn() {
+      const { data: res } = await getArticleListAPI(this.q);
+      if (res.code !== 0) return this.$message.error("获取文章列表失败!");
+      this.artList = res.data;
+      this.total = res.total;
+    },
   },
   created() {
     this.getCateData();
+    this.initArtListFn();
   },
 };
 </script>
