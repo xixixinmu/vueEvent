@@ -73,15 +73,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="文章内容" prop="content">
-          <quill-editor v-model="pubForm.content"></quill-editor>
+          <quill-editor v-model="pubForm.content" @change="contentChangeFn"></quill-editor>
         </el-form-item>
         <el-form-item label="文章封面">
           <!-- 用来显示封面的图片 -->
-          <img
-            src="@/assets/cover.jpg"
-            class="cover-img"
-            ref="imgRef"
-          />
+          <img src="@/assets/cover.jpg" class="cover-img" ref="imgRef" />
           <br />
           <!-- 文件选择框，默认被隐藏 -->
           <input
@@ -108,8 +104,8 @@
 </template>
 
 <script>
-import { getCateListAPI,addArticleAPI } from "@/api";
-import defaultImg from '@/assets/cover.jpg'
+import { getCateListAPI, addArticleAPI } from "@/api";
+import defaultImg from "@/assets/cover.jpg";
 export default {
   name: "art-list",
   data() {
@@ -142,6 +138,9 @@ export default {
           { required: true, message: "请选择文章分类", trigger: "change" },
         ],
         content: [
+          //content对应quill-editor富文本编辑器，它不是el提供表单标签
+          // quill-editor2个事件都没有，所以你输入内容也不会自动走校验//解决:
+          //自己来给quill-editor绑定change事件(在文档里查到的它支持change事件内容改变事件)
           { required: true, message: "请输入文章内容", trigger: "blur" },
         ],
       },
@@ -187,22 +186,26 @@ export default {
       const files = e.target.files;
       if (files.length === 0) {
         this.pubForm.cover_img = null;
-        this.$refs.imgRef.setAttribute('src', defaultImg)
+        this.$refs.imgRef.setAttribute("src", defaultImg);
       } else {
         this.pubForm.cover_img = files[0];
         const url = URL.createObjectURL(files[0]);
-        this.$refs.imgRef.setAttribute('src', url)
+        this.$refs.imgRef.setAttribute("src", url);
       }
     },
     // 发布或存为草稿
-    pubArticleFn(str){
-        this.$refs.pubFormRef.validate(async valid=>{
-          if(valid){
-            this.pubForm.state=str
-            const {data:res}=await addArticleAPI(this.pubForm)
-            console.log(res)
-          }else return false
-        })
+    pubArticleFn(str) {
+      this.$refs.pubFormRef.validate(async (valid) => {
+        if (valid) {
+          this.pubForm.state = str;
+          const { data: res } = await addArticleAPI(this.pubForm);
+          console.log(res);
+        } else return false;
+      });
+    },
+    //富文本编辑器内容改变触发此事件方法
+    contentChangeFn(){
+      this.$refs.pubFormRef.validateField("content")
     }
   },
   created() {
