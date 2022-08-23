@@ -384,6 +384,15 @@ export default {
       if (res.code !== 0) return this.$message.error("删除失败!");
       this.$message.success("删除成功!");
       // 刷新列表数据
+
+      // 判断最后一页不止一条时 不需要往前跳 
+      // 当删除最后一页的最后一条时  页面需要往前跳一页
+      // 当页面为第一页时 不需要往前跳
+      if (this.total % this.q.pagesize == 1) {
+        if(this.q.pagenum>1){
+        this.q.pagenum--;
+        }
+      }
       this.initArtListFn();
     },
   },
