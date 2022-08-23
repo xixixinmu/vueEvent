@@ -269,7 +269,12 @@ export default {
     handleSizeChangeFn(newSize) {
       // 为 pagesize 赋值
       this.q.pagesize = newSize;
-      // 默认展示第一页数据
+      //问题:先点击最后一个页码，切换每页显示条数2->3，总数不够，分页只能分到2
+      //每页条数改变了，页码从3到2页改变了，2个事件都会触发
+      //偶发性的bug:有的时候自动早到第二页有数据有的时候没有
+      //知识点:2个网络请求一起发，谁先回来不一定
+      //解决:当切换每页显示的条数，我们就把当前页码设置为1，而且标签里要设置
+      //原因:所以可能第2页3条数据回来有值铺设，紧接着第3页的3条数据回来了，空数组所以页面就是空的
       this.q.pagenum = 1;
       // 重新发起请求
       this.initArtListFn();
@@ -281,7 +286,10 @@ export default {
       // 为页码值赋值
       this.q.pagenum = newPage;
       // 重新发起请求
+
       this.initArtListFn();
+
+
     },
     // 筛选按钮
     chooseFn() {
@@ -290,13 +298,13 @@ export default {
       this.initArtListFn();
     },
     // 重置按钮
-    resetFn(){
+    resetFn() {
       this.q.pagenum = 1;
       this.q.pagesize = 2;
-      this.q.cate_id=''
-      this.q.state=''
+      this.q.cate_id = "";
+      this.q.state = "";
       this.initArtListFn();
-    }
+    },
   },
   created() {
     this.getCateData();
