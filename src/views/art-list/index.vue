@@ -6,32 +6,30 @@
         <span>文章列表</span>
       </div>
       <div>
-        <el-form inline :model="articleForm">
+        <el-form inline :model="q">
           <el-form-item label="文章分类" style="margin-right: 25px">
             <el-select
-              v-model="articleForm.atrClass"
+              v-model="q.cate_id"
               placeholder="请选择分类"
               @click="getCateData"
             >
               <el-option
                 :label="obj.cate_name"
-                :value="obj.cate_id"
+                :value="obj.id"
                 v-for="obj in cateFrom"
                 :key="obj.id"
               ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="发布状态">
-            <el-select
-              v-model="articleForm.publishState"
-              placeholder="请选择状态"
-            >
-              <el-option label="区域一" value="shanghai"></el-option>
+            <el-select v-model="q.state" placeholder="请选择状态">
+              <el-option label="已发布" value="已发布"></el-option>
+              <el-option label="草稿" value="草稿"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary">筛选</el-button>
-            <el-button type="info">重置</el-button>
+            <el-button type="primary" @click="chooseFn">筛选</el-button>
+            <el-button type="info" @click="resetFn">重置</el-button>
           </el-form-item>
           <el-form-item style="float: right">
             <el-button type="primary" @click="showPubDialogFn"
@@ -136,10 +134,6 @@ export default {
   name: "art-list",
   data() {
     return {
-      articleForm: {
-        atrClass: "",
-        publishState: "",
-      },
       pubDialogVisible: false,
       pubForm: {
         // 表单的数据对象
@@ -289,6 +283,20 @@ export default {
       // 重新发起请求
       this.initArtListFn();
     },
+    // 筛选按钮
+    chooseFn() {
+      this.q.pagenum = 1;
+      this.q.pagesize = 2;
+      this.initArtListFn();
+    },
+    // 重置按钮
+    resetFn(){
+      this.q.pagenum = 1;
+      this.q.pagesize = 2;
+      this.q.cate_id=''
+      this.q.state=''
+      this.initArtListFn();
+    }
   },
   created() {
     this.getCateData();
