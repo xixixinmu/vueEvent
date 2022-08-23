@@ -6,8 +6,11 @@ import store from "@/store";
 import router from "@/router/index"
 import { Message } from "element-ui";
 
+export const baseURL = 'http://big-event-vue-api-t.itheima.net'
+// 导出基地址方便图片获取拼接使用
+
 const myAxios = axios.create({
-  baseURL: "http://big-event-vue-api-t.itheima.net",
+  baseURL,
 });
 
 myAxios.interceptors.request.use(

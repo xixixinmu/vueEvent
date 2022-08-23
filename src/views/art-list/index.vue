@@ -39,7 +39,13 @@
         </el-form>
       </div>
       <el-table :data="artList" style="width: 100%" border stripe>
-        <el-table-column label="文章标题" prop="title"></el-table-column>
+        <el-table-column label="文章标题">
+          <template v-slot="{ row }">
+            <el-link type="primary" @click="getArticleDetailFn(row.id)">{{
+              row.title
+            }}</el-link>
+          </template>
+        </el-table-column>
         <el-table-column label="分类" prop="cate_name"></el-table-column>
         <el-table-column label="发表时间" prop="pub_date">
           <template v-slot="{ row }">
@@ -47,7 +53,14 @@
           </template>
         </el-table-column>
         <el-table-column label="状态" prop="state"></el-table-column>
-        <el-table-column label="操作"></el-table-column>
+        <el-table-column label="操作">
+          <!-- 记住作用域插槽写法 v-slot 会有一个scope对象 解构赋值出里面的row -->
+          <template v-slot="{ row }">
+            <el-button type="danger" @click="deleteArt(row.id)" size="mini"
+              >删除</el-button
+            >
+          </template>
+        </el-table-column>
       </el-table>
       <!-- 分页区域 -->
       <el-pagination
@@ -124,12 +137,43 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <!-- 查看文章详情的对话框 -->
+    <el-dialog title="文章预览" :visible.sync="detailVisible" width="80%">
+      <h1 class="title">{{ artDetail.title }}</h1>
+
+      <div class="info">
+        <span>作者：{{ artDetail.nickname || artDetail.username }}</span>
+        <span>发布时间：{{ $formatDate(artDetail.pub_date) }}</span>
+        <span>所属分类：{{ artDetail.cate_name }}</span>
+        <span>状态：{{ artDetail.state }}</span>
+      </div>
+
+      <!-- 分割线 -->
+      <el-divider></el-divider>
+
+      <!-- 文章的封面 -->
+      <img :src="baseURL + artDetail.cover_img" alt="" />
+      <!-- 后端返回图片链接地址的经验://为何后端返回的图片地址是半截的?
+            原因:因为服务器的域名可能会来回变化，所以数据库里的地址只有相对路径
+            要求:前端请求此图片的时候，后端告诉你图片文件真身所在的服务器域名，前端目己拼按丽缴
+       -->
+
+      <!-- 文章的详情 -->
+      <div v-html="artDetail.content" class="detail-box"></div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getCateListAPI, addArticleAPI, getArticleListAPI } from "@/api";
+import {
+  getCateListAPI,
+  addArticleAPI,
+  getArticleListAPI,
+  getArticleDetailAPI,
+  deleteArticleAPI,
+} from "@/api";
 import defaultImg from "@/assets/cover.jpg";
+import { baseURL } from "@/utils/request";
 export default {
   name: "art-list",
   data() {
@@ -176,6 +220,9 @@ export default {
         cate_id: "", //分类id
         state: "", //状态
       },
+      detailVisible: false, // 控制文章详情对话框的显示与隐藏
+      artDetail: {}, // 文章的详情信息对象
+      baseURL: baseURL,
     };
   },
   methods: {
@@ -288,8 +335,6 @@ export default {
       // 重新发起请求
 
       this.initArtListFn();
-
-
     },
     // 筛选按钮
     chooseFn() {
@@ -303,6 +348,42 @@ export default {
       this.q.pagesize = 2;
       this.q.cate_id = "";
       this.q.state = "";
+      this.initArtListFn();
+    },
+    // 点击文章标题进入文章详情
+    async getArticleDetailFn(id) {
+      const { data: res } = await getArticleDetailAPI(id);
+      console.log(res.data);
+      this.artDetail = res.data;
+      this.detailVisible = true;
+    },
+    // 删除文章
+    async deleteArt(id) {
+      // const {data:res}=await deleteArticleAPI(id)
+      // console.log(res)
+      // if(res.code!==0) return this.$message.error(res.message)
+      // this.$message.success(res.message)
+      // this.initArtListFn()
+      // 1. 询问用户是否要删除
+      const confirmResult = await this.$confirm(
+        "此操作将永久删除该文件, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => err);
+
+      // 2. 取消了删除
+      if (confirmResult === "cancel") return;
+
+      // 执行删除的操作
+      const { data: res } = await deleteArticleAPI(id);
+
+      if (res.code !== 0) return this.$message.error("删除失败!");
+      this.$message.success("删除成功!");
+      // 刷新列表数据
       this.initArtListFn();
     },
   },
@@ -343,5 +424,27 @@ export default {
 
 .el-pagination {
   margin-top: 15px;
+}
+
+.title {
+  font-size: 24px;
+  text-align: center;
+  font-weight: normal;
+  color: #000;
+  margin: 0 0 10px 0;
+}
+
+.info {
+  font-size: 12px;
+  span {
+    margin-right: 20px;
+  }
+}
+
+// 修改 dialog 内部元素的样式，需要添加样式穿透
+::v-deep .detail-box {
+  img {
+    width: 500px;
+  }
 }
 </style>

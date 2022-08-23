@@ -183,3 +183,29 @@ export const addArticleAPI = (fd) => {
     }
   })
 }
+
+/**
+ * 获取-文章详情
+ * @param {*} id 文章id
+ * @returns Promise对象
+ */
+ export const getArticleDetailAPI = (id) => {
+  return request({
+    url: '/my/article/info',
+    params: {
+      id
+    }
+  })
+}
+
+export const deleteArticleAPI = (id) => {
+  return request({
+    url: '/my/article/info',
+    method:"DELETE",
+    params: {
+      id
+    }
+  })
+}
+
+
