@@ -38,15 +38,30 @@
               >发表文章</el-button
             >
           </el-form-item>
-          <el-table :data="artList" style="width: 100%" border stripe>
-            <el-table-column label="文章标题" prop="title"></el-table-column>
-            <el-table-column label="分类" prop="cate_name"></el-table-column>
-            <el-table-column label="发表时间" prop="pub_date"></el-table-column>
-            <el-table-column label="状态" prop="state"></el-table-column>
-            <el-table-column label="操作"></el-table-column>
-          </el-table>
         </el-form>
       </div>
+      <el-table :data="artList" style="width: 100%" border stripe>
+        <el-table-column label="文章标题" prop="title"></el-table-column>
+        <el-table-column label="分类" prop="cate_name"></el-table-column>
+        <el-table-column label="发表时间" prop="pub_date">
+          <template v-slot="{ row }">
+            <span>{{ $formatDate(row.pub_date) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" prop="state"></el-table-column>
+        <el-table-column label="操作"></el-table-column>
+      </el-table>
+      <!-- 分页区域 -->
+      <el-pagination
+        @size-change="handleSizeChangeFn"
+        @current-change="handleCurrentChangeFn"
+        :current-page.sync="q.pagenum"
+        :page-sizes="[2, 3, 5, 10]"
+        :page-size.sync="q.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      >
+      </el-pagination>
     </el-card>
     <!-- 写文章弹出来的对话框 -->
     <el-dialog
@@ -232,7 +247,7 @@ export default {
           console.log(res);
           if (res.code !== 0) return this.$message.error("发布文章失败！");
           this.$message.success("发布文章成功！");
-          this.pubDialogVisible=false
+          this.pubDialogVisible = false;
           // 关闭对话框
           this.initArtListFn();
           // 发布后重新获取文章数据
@@ -255,6 +270,24 @@ export default {
       if (res.code !== 0) return this.$message.error("获取文章列表失败!");
       this.artList = res.data;
       this.total = res.total;
+    },
+    // pageSize 发生了变化
+    handleSizeChangeFn(newSize) {
+      // 为 pagesize 赋值
+      this.q.pagesize = newSize;
+      // 默认展示第一页数据
+      this.q.pagenum = 1;
+      // 重新发起请求
+      this.initArtListFn();
+    },
+    //核心思想:根据选择的页码/条数，影响q对象对应属性的值，再重新发一次请求让后台重新返回数据
+
+    // 页码值发生了变化
+    handleCurrentChangeFn(newPage) {
+      // 为页码值赋值
+      this.q.pagenum = newPage;
+      // 重新发起请求
+      this.initArtListFn();
     },
   },
   created() {
@@ -290,5 +323,9 @@ export default {
   width: 400px;
   height: 280px;
   object-fit: cover;
+}
+
+.el-pagination {
+  margin-top: 15px;
 }
 </style>
