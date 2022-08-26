@@ -29,48 +29,48 @@
 </template>
 
 <script>
-import { loginAPI } from "@/api/index";
-import { mapMutations,mapActions } from "vuex";
+import { loginAPI } from '@/api/index'
+import { mapMutations, mapActions } from 'vuex'
 // 导入mutation中写的函数
 export default {
-  name: "LoginPage",
-  data() {
+  name: 'LoginPage',
+  data () {
     return {
       form: {
-        username: "",
-        password: "",
-      },
-    };
+        username: '',
+        password: ''
+      }
+    }
   },
   methods: {
     // 扩展运算符导入函数
-    ...mapMutations(["updateToken"]),
-    ...mapActions(["initUserInfo"]),
-    async loginFn() {
-      if (this.form.username != "" && this.form.password != "") {
+    ...mapMutations(['updateToken']),
+    ...mapActions(['initUserInfo']),
+    async loginFn () {
+      if (this.form.username !== '' && this.form.password !== '') {
         // 把axios返回的数据对象data中的值存在res里
-        const { data: res } = await loginAPI(this.form);
-        if (res.code != 0) {
+        const { data: res } = await loginAPI(this.form)
+        if (res.code !== 0) {
           // code为0成功 1异常
-          return this.$message.error(res.message);
+          return this.$message.error(res.message)
           // $message为elementUI封装的弹窗
         } else {
-          this.$message.success(res.message);
-          this.updateToken(res.token);
-          this.$router.push("/layout");
+          this.$message.success(res.message)
+          this.updateToken(res.token)
+          this.$router.push('/layout')
           // 调用mutation中的方法
           this.initUserInfo()
         }
       } else {
-        return false;
+        return false
         // 阻止表单默认提交行为
       }
     },
-    goRegister() {
-      this.$router.push("./register");
-    },
-  },
-};
+    goRegister () {
+      this.$router.push('./register')
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

@@ -29,55 +29,55 @@
 </template>
 
 <script>
-import { updateUserinfoAPI } from "@/api";
+import { updateUserinfoAPI } from '@/api'
 export default {
-  name: "user-info",
-  data() {
+  name: 'user-info',
+  data () {
     return {
       userInfo: {
         name: this.$store.state.userInfo.username,
-        nickname: "",
-        email: "",
+        nickname: '',
+        email: ''
       },
       userInfoRules: {
         nickname: [
-          { required: true, message: "请输入用户昵称", trigger: "blur" },
+          { required: true, message: '请输入用户昵称', trigger: 'blur' },
           {
             pattern: /^\S{1,10}$/,
-            message: "昵称必须是1-10位的非空字符串",
-            trigger: "blur",
-          },
+            message: '昵称必须是1-10位的非空字符串',
+            trigger: 'blur'
+          }
         ],
         email: [
-          { required: true, message: "请输入用户邮箱", trigger: "blur" },
-          { type: "email", message: "邮箱格式不正确", trigger: "blur" },
-        ],
-      },
-    };
-  },
-  methods: {
-    submitChangeFn() {
-      // 通过refs属性获取表单 进行兜底验证 只有通过前端校验才能提交
-      this.$refs.userFormRefs.validate( async (vaild) => {
-        if (vaild) {
-          this.userInfo.id=this.$store.state.userInfo.id
-          // id属性必传  所以从vuex上面取出来 给userinfo加上
-          const {data:res}=await updateUserinfoAPI(this.userInfo)
-          if(res.code!=0) return this.$message.error("更新用户信息失败")
-          this.$message.success(res.message)
-          this.$store.dispatch("initUserInfo")
-          //重新让vuex获取下最新的用户数据
-        } else {
-          return false;
-        }
-      });
-    },
-    resetFn(){
-      this.userInfo.nickname=""
-      this.userInfo.email=""
+          { required: true, message: '请输入用户邮箱', trigger: 'blur' },
+          { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }
+        ]
+      }
     }
   },
-};
+  methods: {
+    submitChangeFn () {
+      // 通过refs属性获取表单 进行兜底验证 只有通过前端校验才能提交
+      this.$refs.userFormRefs.validate(async (vaild) => {
+        if (vaild) {
+          this.userInfo.id = this.$store.state.userInfo.id
+          // id属性必传  所以从vuex上面取出来 给userinfo加上
+          const { data: res } = await updateUserinfoAPI(this.userInfo)
+          if (res.code !== 0) return this.$message.error('更新用户信息失败')
+          this.$message.success(res.message)
+          this.$store.dispatch('initUserInfo')
+          // 重新让vuex获取下最新的用户数据
+        } else {
+          return false
+        }
+      })
+    },
+    resetFn () {
+      this.userInfo.nickname = ''
+      this.userInfo.email = ''
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

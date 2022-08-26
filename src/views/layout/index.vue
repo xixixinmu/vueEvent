@@ -45,7 +45,7 @@
         </div>
         <!-- 侧边栏导航菜单 -->
 
-        <!-- 
+        <!--
              default-active:当前激活菜单的index (el-submenu/el-menu-item的index值)，对应菜单就有激活样式@open: sub-menu展开的回调
              @close: sub-menu关闭的回调
              active-text-color:哪项index的值和default-active一致，就会被设置动态文字颜色
@@ -88,7 +88,7 @@
       </el-aside>
       <el-container>
         <!-- 页面主体区域 -->
-        <el-main> 
+        <el-main>
           <router-view></router-view> </el-main>
         <!-- 底部 footer 区域 -->
         <el-footer>© www.itheima.com - 黑马程序员</el-footer>
@@ -98,63 +98,63 @@
 </template>
 
 <script>
-import { mapMutations, mapGetters } from "vuex";
-import { getMenusAPI } from "@/api/index";
-//经验:在组件标签上绑定的所有事件(包括原生事件的名字click,input等等)//都是自定义事件，都需要组件内$emit来触发才行
-//万一组件内不支持这个原生事件名字
-//解决:@事件名.native="methods里方法名"
-//.native给组件内根标签，绑定这个原生的事件
+import { mapMutations, mapGetters } from 'vuex'
+import { getMenusAPI } from '@/api/index'
+// 经验:在组件标签上绑定的所有事件(包括原生事件的名字click,input等等)//都是自定义事件，都需要组件内$emit来触发才行
+// 万一组件内不支持这个原生事件名字
+// 解决:@事件名.native="methods里方法名"
+// .native给组件内根标签，绑定这个原生的事件
 export default {
-  name: "LayoutPage",
-  data() {
+  name: 'LayoutPage',
+  data () {
     return {
-      menus: [],
-    };
+      menus: []
+    }
   },
   methods: {
-    ...mapMutations(["updateToken", "updateUserInfo"]),
-    logoutFn() {
+    ...mapMutations(['updateToken', 'updateUserInfo']),
+    logoutFn () {
       // 退出登录的逻辑：增加确认提示，去除token，强制跳转
-      this.$confirm("是否退出登录？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('是否退出登录？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
           this.$message({
-            type: "success",
-            message: "已退出登录",
-          });
-          this.$store.commit("updateToken", "");
-          this.$store.commit("updateUserInfo", {});
-          this.$router.push("/login");
+            type: 'success',
+            message: '已退出登录'
+          })
+          this.$store.commit('updateToken', '')
+          this.$store.commit('updateUserInfo', {})
+          this.$router.push('/login')
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "取消退出登录",
-          });
-        });
+            type: 'info',
+            message: '取消退出登录'
+          })
+        })
     },
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+    handleOpen (key, keyPath) {
+      console.log(key, keyPath)
     },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
+    handleClose (key, keyPath) {
+      console.log(key, keyPath)
     },
-    async getMenuListFn() {
-      const { data: res } = await getMenusAPI();
-      this.menus = res.data;
-    },
+    async getMenuListFn () {
+      const { data: res } = await getMenusAPI()
+      this.menus = res.data
+    }
   },
   computed: {
-    ...mapGetters(["nickname", "username", "user_pic"]),
+    ...mapGetters(['nickname', 'username', 'user_pic'])
     // getters要映射到computed里
   },
-  created() {
-    this.getMenuListFn();
-  },
-};
+  created () {
+    this.getMenuListFn()
+  }
+}
 </script>
 
 <style lang="less" scoped>

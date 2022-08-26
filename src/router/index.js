@@ -1,72 +1,70 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 
-import store from "@/store/index";
+import store from '@/store/index'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
-const whiteList = ["/login", "/register"];
+const whiteList = ['/login', '/register']
 
 const routes = [
   {
-    path: "/",
-    redirect: "/layout",
+    path: '/',
+    redirect: '/layout'
   },
   {
-    path: "/register",
-    component: () => import("@/views/register"),
+    path: '/register',
+    component: () => import('@/views/register')
     // 路由懒加载方式
   },
   {
-    path: "/login",
-    component: () => import("@/views/login"),
+    path: '/login',
+    component: () => import('@/views/login')
   },
   {
-    path: "/layout",
-    component: () => import("@/views/layout"),
+    path: '/layout',
+    component: () => import('@/views/layout'),
     // 路由懒加载方式
-    redirect:"/home",
-    children:[
+    redirect: '/home',
+    children: [
       {
-        path:'/home',
-        component:()=>import("@/views/home")
+        path: '/home',
+        component: () => import('@/views/home')
       },
       {
-        path:"/user-info",
-        component:()=>import("@/views/user-info")
+        path: '/user-info',
+        component: () => import('@/views/user-info')
       },
       {
-        path:"/user-avatar",
-        component:()=>import("@/views/user-avatar")
+        path: '/user-avatar',
+        component: () => import('@/views/user-avatar')
       },
       {
-        path:"/user-pwd",
-        component:()=>import("@/views/user-pwd")
+        path: '/user-pwd',
+        component: () => import('@/views/user-pwd')
       },
       {
-        path:"/art-cate",
-        component:()=>import("@/views/art-cate")
+        path: '/art-cate',
+        component: () => import('@/views/art-cate')
       },
       {
-        path:"/art-list",
-        component:()=>import("@/views/art-list")
+        path: '/art-list',
+        component: () => import('@/views/art-list')
       }
     ]
-  },
-];
+  }
+]
 
 const router = new VueRouter({
-  routes,
-});
-
-
+  routes
+})
 
 // 全局前置路由守卫：登录后更新vuex里的用户数据
 
-//全局前置路由守卫
-//知识点1:浏览器第一次打开项目页面,会触发一次全局前置路由守卫函数
-//知识点2:判断登陆与否:有token就证明登录了，无token未登录
-//知识点3:next()如果强制切换路由地址,会再次走路由守卫再次去匹配路由表（如果只写next("/login")不写白名单会导致循环）
+// 全局前置路由守卫
+// 知识点1:浏览器第一次打开项目页面,会触发一次全局前置路由守卫函数
+// 知识点2:判断登陆与否:有token就证明登录了，无token未登录
+// 知识点3:next()如果强制切换路由地址,会再次走路由守卫再次去匹配路由表（如果只写next("/login")不写白名单会导致循环）
 router.beforeEach((to, from, next) => {
   const token = store.state.token
   if (token) {
@@ -85,17 +83,16 @@ router.beforeEach((to, from, next) => {
       next()
     } else {
       // 如果其他页面请强制拦截并跳转到登录页面
-      next("/login")
+      next('/login')
     }
   }
 })
 
-//获取原型对象上的push函数
+// 获取原型对象上的push函数
 const originalPush = VueRouter.prototype.push
-//修改原型对象中的push方法
-VueRouter.prototype.push = function push(location) {
+// 修改原型对象中的push方法
+VueRouter.prototype.push = function push (location) {
   return originalPush.call(this, location).catch(err => err)
 }
 
-
-export default router;
+export default router

@@ -37,81 +37,81 @@
 </template>
 
 <script>
-import { registerAPI } from "@/api/index";
+import { registerAPI } from '@/api/index'
 export default {
-  name: "RegisterPage",
-  data() {
+  name: 'RegisterPage',
+  data () {
     // 自定义规则函数也要写在data里 但不写return里
     const samePwdFn = (rule, value, callback) => {
       // console.log(rule, value, callback);
-      if (this.form.password != value) {
-        callback(new Error("两次输入密码不一致"));
+      if (this.form.password !== value) {
+        callback(new Error('两次输入密码不一致'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       form: {
-        username: "",
-        password: "",
-        repassword: "",
+        username: '',
+        password: '',
+        repassword: ''
       },
       rules: {
-        //校验规则
+        // 校验规则
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
+          { required: true, message: '请输入用户名', trigger: 'blur' },
           {
             pattern: /^[a-zA-Z0-9]{1,10}$/,
-            message: "用户名必须是1-10的大小写字母数字",
-            trigger: "blur",
-          },
+            message: '用户名必须是1-10的大小写字母数字',
+            trigger: 'blur'
+          }
         ],
         // pattern属于正则匹配要输入的东西
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
+          { required: true, message: '请输入密码', trigger: 'blur' },
           {
             pattern: /^[\S]{6,15}$/,
             //  \S为匹配非空格字符  \s为匹配空白字符
-            message: "密码为6-15位的非空格字符",
-            trigger: "blur",
-          },
+            message: '密码为6-15位的非空格字符',
+            trigger: 'blur'
+          }
         ],
         repassword: [
-          { required: true, message: "该处不能为空", trigger: "blur" },
-          { validator: samePwdFn, trigger: "blur" },
-        ],
-      },
-    };
+          { required: true, message: '该处不能为空', trigger: 'blur' },
+          { validator: samePwdFn, trigger: 'blur' }
+        ]
+      }
+    }
   },
   methods: {
     // 注册
-    registerFn() {
+    registerFn () {
       // js兜底校验  判断输入是否通过前端校验
       this.$refs.form.validate(async (valid) => {
         if (valid) {
           // 通过校验
 
           // 把axios返回的数据对象data中的值存在res里
-          const { data: res } = await registerAPI(this.form);
-          if (res.code != 0) {
+          const { data: res } = await registerAPI(this.form)
+          if (res.code !== 0) {
             // code为0成功 1异常
-            return this.$message.error(res.message);
+            return this.$message.error(res.message)
             // $message为elementUI封装的弹窗
           } else {
-            this.$message.success(res.message);
-            this.$router.push("./login");
+            this.$message.success(res.message)
+            this.$router.push('./login')
           }
         } else {
-          return false;
+          return false
           // 阻止表单默认提交行为
         }
-      });
+      })
     },
-    goLogin() {
-      this.$router.push("./login");
-    },
-  },
-};
+    goLogin () {
+      this.$router.push('./login')
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
