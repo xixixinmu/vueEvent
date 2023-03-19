@@ -18,9 +18,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width: 100%" @click="loginFn"
-            >登录</el-button
-          >
+          <el-button type="primary" style="width: 100%" @click="loginFn">登录</el-button>
           <el-link type="info" @click="goRegister">去注册</el-link>
         </el-form-item>
       </el-form>
@@ -57,7 +55,7 @@ export default {
         } else {
           this.$message.success(res.message)
           this.updateToken(res.token)
-          this.$router.push('/layout')
+          this.$router.push('/user-avatar')
           // 调用mutation中的方法
           this.initUserInfo()
         }

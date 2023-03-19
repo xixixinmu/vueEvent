@@ -5,7 +5,8 @@ let CDN = { css: [], js: [] }
 // 判断是否是生产环境
 const isProduction = process.env.NODE_ENV === 'production'
 // 如何是生产环境，需要执行以下逻辑
-if (isProduction = true) {
+if (isProduction === true) {
+  // eslint-disable-next-line no-unused-expressions
   externals = {
     /**
       * externals 对象属性解析：
@@ -25,7 +26,7 @@ if (isProduction = true) {
     'element-ui': 'ELEMENT',
     'vue-quill-editor': 'VueQuillEditor',
     'vuex-persistedstate': 'createPersistedState'
-  },
+  }
   CDN = {
     css: ['https://unpkg.com/element-ui@2.15.8/lib/theme-chalk/index.css',
       'https://unpkg.com/quill@1.3.7/dist/quill.core.css',

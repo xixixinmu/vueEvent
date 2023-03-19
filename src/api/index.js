@@ -19,10 +19,6 @@ export const registerAPI = ({ username, password, repassword }) => {
 }
 
 export const loginAPI = ({ username, password }) => {
-  // 结构赋值传参，调用这个函数传参可以直接传整个对象
-
-  // 原地是一个Promise对象(内部包含原生ajax请求)
-  // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
   return request({
     url: '/api/login',
     method: 'POST',
@@ -38,15 +34,6 @@ export const getUsersInfoAPI = () => {
   // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
   return request({
     url: '/my/userinfo',
-    method: 'GET'
-  })
-}
-
-export const getMenusAPI = () => {
-  // 原地是一个Promise对象(内部包含原生ajax请求)
-  // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
-  return request({
-    url: '/my/menus',
     method: 'GET'
   })
 }
@@ -203,5 +190,15 @@ export const deleteArticleAPI = (id) => {
     params: {
       id
     }
+  })
+}
+
+export const searchPictureAPI = (formData) => {
+  // 如果是一个普通对象，axios会把它转成JSON字符串在请求里体里交给后台
+  // 这个接口文档要求请求体里是一个FormData类型(表单数据对象)携带文件给后台
+  return request({
+    url: '/api/search',
+    method: 'POST',
+    data: formData
   })
 }

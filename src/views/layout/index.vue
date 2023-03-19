@@ -89,9 +89,10 @@
       <el-container>
         <!-- 页面主体区域 -->
         <el-main>
-          <router-view></router-view> </el-main>
+          <router-view></router-view>
+        </el-main>
         <!-- 底部 footer 区域 -->
-        <el-footer>© www.itheima.com - 黑马程序员</el-footer>
+        <el-footer>昊目智能网站</el-footer>
       </el-container>
     </el-container>
   </el-container>
@@ -99,7 +100,6 @@
 
 <script>
 import { mapMutations, mapGetters } from 'vuex'
-import { getMenusAPI } from '@/api/index'
 // 经验:在组件标签上绑定的所有事件(包括原生事件的名字click,input等等)//都是自定义事件，都需要组件内$emit来触发才行
 // 万一组件内不支持这个原生事件名字
 // 解决:@事件名.native="methods里方法名"
@@ -110,6 +110,13 @@ export default {
     return {
       menus: []
     }
+  },
+  computed: {
+    ...mapGetters(['nickname', 'username', 'user_pic'])
+    // getters要映射到computed里
+  },
+  created () {
+    this.setMenuListFn()
   },
   methods: {
     ...mapMutations(['updateToken', 'updateUserInfo']),
@@ -142,17 +149,20 @@ export default {
     handleClose (key, keyPath) {
       console.log(key, keyPath)
     },
-    async getMenuListFn () {
-      const { data: res } = await getMenusAPI()
-      this.menus = res.data
+    setMenuListFn () {
+      this.menus = [{
+        icon: 'el-icon-s-cooperation',
+        indexPath: '1',
+        title: '管理快件',
+        children: [
+          {
+            icon: 'el-icon-camera',
+            indexPath: '/user-avatar',
+            title: '操作快件'
+          }
+        ]
+      }]
     }
-  },
-  computed: {
-    ...mapGetters(['nickname', 'username', 'user_pic'])
-    // getters要映射到computed里
-  },
-  created () {
-    this.getMenuListFn()
   }
 }
 </script>
