@@ -10,7 +10,7 @@ const whiteList = ['/login', '/register']
 const routes = [
   {
     path: '/',
-    redirect: '/layout'
+    redirect: '/login'
   },
   {
     path: '/register',
@@ -50,6 +50,14 @@ const routes = [
       {
         path: '/art-list',
         component: () => import('@/views/art-list')
+      },
+      {
+        path: '/statistics',
+        component: () => import('@/components/AdminHome/Statistics.vue')
+      },
+      {
+        path: '/addDelivery',
+        component: () => import('@/components/AdminHome/AddDelivery.vue')
       }
     ]
   }

@@ -29,6 +29,17 @@ export const loginAPI = ({ username, password }) => {
   })
 }
 
+export const statisticsAPI = ({ page, pageSize }) => {
+  return request({
+    url: '/api/statistics',
+    method: 'POST',
+    data: {
+      page,
+      pageSize
+    }
+  })
+}
+
 export const getUsersInfoAPI = () => {
   // 原地是一个Promise对象(内部包含原生ajax请求)
   // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果

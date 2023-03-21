@@ -2,9 +2,7 @@
   <el-container class="main-container">
     <!-- 头部区域 -->
     <el-header>
-      <!-- 左侧的 logo -->
       <img src="@/assets/logo.png" alt="" />
-      <!-- 右侧的菜单 -->
       <el-menu
         class="el-menu-top"
         mode="horizontal"
@@ -12,9 +10,8 @@
         text-color="#fff"
         active-text-color="#409EFF"
       >
-        <el-submenu index="1">
+        <!-- <el-submenu index="1">
           <template slot="title">
-            <!-- 头像 -->
             <img :src="$store.state.userInfo.user_pic" alt="" class="avatar" />
             <span>个人中心</span>
           </template>
@@ -27,7 +24,7 @@
           <el-menu-item index="1-3"
             ><i class="el-icon-key"></i>重置密码</el-menu-item
           >
-        </el-submenu>
+        </el-submenu> -->
         <el-menu-item index="2" @click="logoutFn"
           ><i class="el-icon-switch-button"></i>退出</el-menu-item
         >
@@ -150,18 +147,30 @@ export default {
       console.log(key, keyPath)
     },
     setMenuListFn () {
-      this.menus = [{
-        icon: 'el-icon-s-cooperation',
-        indexPath: '1',
-        title: '管理快件',
-        children: [
-          {
-            icon: 'el-icon-camera',
-            indexPath: '/user-avatar',
-            title: '操作快件'
-          }
-        ]
-      }]
+      this.menus = [
+        {
+          icon: 'el-icon-s-cooperation',
+          indexPath: '/statistics',
+          title: '统计功能'
+        },
+        {
+          icon: 'el-icon-s-cooperation',
+          indexPath: '/addDelivery',
+          title: '添加快件'
+        },
+        {
+          icon: 'el-icon-s-cooperation',
+          indexPath: '/user-avatar',
+          title: '管理快件'
+          // children: [
+          //   {
+          //     icon: 'el-icon-camera',
+          //     indexPath: '/user-avatar',
+          //     title: '操作快件'
+          //   }
+          // ]
+        }
+      ]
     }
   }
 }
