@@ -10,16 +10,49 @@ const whiteList = ['/login', '/register']
 const routes = [
   {
     path: '/',
-    redirect: '/layout'
+    redirect: '/login'
   },
   {
     path: '/register',
     component: () => import('@/views/register')
-    // 路由懒加载方式
   },
   {
     path: '/login',
     component: () => import('@/views/login')
+  },
+  {
+    path: '/admin',
+    component: () => import('@/views/adminHome'),
+    redirect: '/statistics',
+    children: [
+      {
+        path: '/user-avatar',
+        component: () => import('@/views/user-avatar')
+      },
+      {
+        path: '/statistics',
+        component: () => import('@/components/AdminHome/Statistics.vue')
+      },
+      {
+        path: '/addDelivery',
+        component: () => import('@/components/AdminHome/AddDelivery.vue')
+      }
+    ]
+  },
+  {
+    path: '/user',
+    component: () => import('@/views/userHome/index.vue'),
+    redirect: '/addDelivery',
+    children: [
+      {
+        path: '/user-avatar',
+        component: () => import('@/views/user-avatar')
+      },
+      {
+        path: '/addDelivery',
+        component: () => import('@/components/AdminHome/AddDelivery.vue')
+      }
+    ]
   },
   {
     path: '/layout',
@@ -50,6 +83,14 @@ const routes = [
       {
         path: '/art-list',
         component: () => import('@/views/art-list')
+      },
+      {
+        path: '/statistics',
+        component: () => import('@/components/AdminHome/Statistics.vue')
+      },
+      {
+        path: '/addDelivery',
+        component: () => import('@/components/AdminHome/AddDelivery.vue')
       }
     ]
   }
