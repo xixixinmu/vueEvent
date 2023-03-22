@@ -106,10 +106,18 @@ export default {
           } else {
             this.$message.success('登录成功')
             this.updateToken(res.token)
-            // this.$router.push('/user-avatar')
-            this.$router.push('/statistics')
-            // 调用mutation中的方法
-            this.initUserInfo()
+            console.log(res.isAdmin)
+            if (res.isAdmin === 0) {
+              // this.$router.push('/user-avatar')
+              this.$router.push('/admin')
+              // 调用mutation中的方法
+              this.initUserInfo()
+            } else {
+              // this.$router.push('/user-avatar')
+              this.$router.push('/user')
+              // 调用mutation中的方法
+              this.initUserInfo()
+            }
           }
         } else {
           return false

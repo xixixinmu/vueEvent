@@ -1,18 +1,21 @@
 import request from '@/utils/request'
 
-export const registerAPI = ({ username, password, repassword }) => {
+export const registerAPI = ({ username, password, realName, phone, IDcard, storeName, isAdmin }) => {
   // 结构赋值传参，调用这个函数传参可以直接传整个对象
 
   // 原地是一个Promise对象(内部包含原生ajax请求)
   // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
 
   return request({
-    url: '/api/reg',
+    url: '/api/register',
     method: 'POST',
     data: {
       username,
       password,
-      repassword
+      realName,
+      phone,
+      IDcard,
+      storeName
       // 为了语义明确 不然可以直接传obj
     }
   })
@@ -29,13 +32,61 @@ export const loginAPI = ({ username, password }) => {
   })
 }
 
-export const statisticsAPI = ({ page, pageSize }) => {
+export const statisticsAPI = (page, pageSize) => {
   return request({
     url: '/api/statistics',
     method: 'POST',
     data: {
       page,
       pageSize
+    }
+  })
+}
+
+export const addDelivery = ({ avatar, tags }, brief) => {
+  console.log(avatar)
+  console.log(tags)
+  console.log(brief)
+  return request({
+    url: '/api/add',
+    method: 'POST',
+    data: {
+      avatar,
+      brief,
+      tags
+    }
+  })
+}
+
+export const searchDelivery = ({ avatar, rn }) => {
+  return request({
+    url: '/api/search',
+    method: 'POST',
+    data: {
+      avatar,
+      rn
+    }
+  })
+}
+
+export const deleteDelivery = ({ avatar }) => {
+  return request({
+    url: '/api/delete',
+    method: 'POST',
+    data: {
+      avatar
+    }
+  })
+}
+
+export const updateDelivery = ({ avatar, tags }, brief) => {
+  return request({
+    url: '/api/update',
+    method: 'POST',
+    data: {
+      avatar,
+      brief,
+      tags
     }
   })
 }

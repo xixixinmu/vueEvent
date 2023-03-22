@@ -10,7 +10,7 @@
         </el-steps>
       </div>
       <div class="first_tab" v-if="active === 0">
-        <el-form ref="delivery" :model="delivery" label-width="80px">
+        <el-form ref="delivery" :model="delivery" :rules="rules" label-width="80px">
           <el-form-item label="无面单编号" prop="ID">
             <el-input v-model="delivery.ID"></el-input>
           </el-form-item>
@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class="second_tab" v-if="active === 1">
-        <el-form ref="delivery" :model="delivery" label-width="80px">
+        <el-form ref="delivery" :model="delivery" :rules="rules" label-width="80px">
           <el-form-item label="发现时间" prop="findTime">
             <el-col :span="12">
               <el-date-picker
@@ -79,7 +79,7 @@
         </div>
       </div>
       <div class="third_tab" v-if="active === 2">
-        <el-form ref="delivery" :model="delivery" label-width="80px">
+        <el-form ref="delivery" :model="delivery" :rules="rules" label-width="80px">
           <el-form-item label="发现环节" prop="discoverLink">
             <el-input v-model="delivery.discoverLink"></el-input>
           </el-form-item>
@@ -107,8 +107,8 @@
         </div>
       </div>
       <div class="markdown_tab" v-if="active === 3">
-        <img class="the_img" src="@/assets/avatar.jpg" v-if="!newAvatar" />
-        <img class="the_img" :src="newAvatar" v-else />
+        <img class="the_img" src="@/assets/avatar.jpg" v-if="!newAvatar" @click="selectAvatarFn" />
+        <img class="the_img" :src="newAvatar" v-else @click="selectAvatarFn" />
         <div class="btn-box">
           <input
             type="file"
@@ -138,6 +138,7 @@
 </template>
 
 <script>
+import { addDelivery } from '@/api'
 export default {
   name: 'AddDelivery',
   props: {
@@ -152,10 +153,8 @@ export default {
       myHeader: {
         Authorization: ''
       },
-      fileList: [],
+      formData: {},
       active: 0, // 激活的过程卡片选择器
-      dialogImageUrl: '',
-      dialogVisible: false, // 添加的图片是否可见
       delivery: {
         ID: '',
         findPeople: '',
@@ -175,6 +174,62 @@ export default {
         type2: '',
         color: '',
         formerCode: ''
+      },
+      rules: {
+        ID: [
+          { required: true, message: '请输入无面单编号', trigger: 'blur' }
+        ],
+        findPeople: [
+          { required: true, message: '请输入发现人员', trigger: 'blur' }
+        ],
+        datetime: [
+          { required: true, message: '请选择登记时间', trigger: 'blur' }
+        ],
+        telphone: [
+          { required: true, message: '请输入联系电话', trigger: 'blur' }
+        ],
+        weight: [
+          { required: true, message: '请输入物品重量', trigger: 'blur' }
+        ],
+        description: [
+          { required: true, message: '请输入内件信息', trigger: 'blur' }
+        ],
+        findTime: [
+          { required: true, message: '请选择发现时间', trigger: 'blur' }
+        ],
+        port: [
+          { required: true, message: '请输入进/出港', trigger: 'blur' }
+        ],
+        datePeople: [
+          { required: true, message: '请输入简登人员', trigger: 'blur' }
+        ],
+        type1: [
+          { required: true, message: '请输入快件遗落类型', trigger: 'blur' }
+        ],
+        number: [
+          { required: true, message: '请输入内件数量', trigger: 'blur' }
+        ],
+        transportNumber: [
+          { required: true, message: '请输入车辆运输号', trigger: 'blur' }
+        ],
+        discoverLink: [
+          { required: true, message: '请输入发现环节', trigger: 'blur' }
+        ],
+        unit: [
+          { required: true, message: '请输入登记单位', trigger: 'blur' }
+        ],
+        retroactivePeople: [
+          { required: true, message: '请输入补登人员', trigger: 'blur' }
+        ],
+        type2: [
+          { required: true, message: '请输入物品类别', trigger: 'blur' }
+        ],
+        color: [
+          { required: true, message: '请输入内件颜色', trigger: 'blur' }
+        ],
+        formerCode: [
+          { required: true, message: '请输入上一站编码', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -258,28 +313,25 @@ export default {
         }
         const formData = new FormData()
         formData.append('avatar', file[0])
-        formData.append('rn', 1)
+        formData.append('tags', '100,11')
         this.formData = formData
       }
     },
-    onSubmit () {
-      //   if (!this.delivery) {
-      //     console.log(this.fileList)
-      //     // this.$refs.book.submit();
-      //     reqAddDelivery(this.delivery).then((response) => {
-      //       if (response.code === 200) {
-      //         this.$message({
-      //           type: 'success',
-      //           message: response.message
-      //         })
-      //       } else {
-      //         this.$message({
-      //           type: 'warning',
-      //           message: response.message
-      //         })
-      //       }
-      //     })
-      //   }
+    async onSubmit () {
+      if (!this.delivery) {
+        const { data: res } = await addDelivery(this.formData, this.delivery)
+        if (res.code === 0) {
+          this.$message({
+            type: 'success',
+            message: res.message
+          })
+        } else {
+          this.$message({
+            type: 'warning',
+            message: res.message
+          })
+        }
+      }
     }
   },
   created () {}

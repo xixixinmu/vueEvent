@@ -4,42 +4,42 @@ import createPersistedState from 'vuex-persistedstate'
 // Vuex数据状态持久化
 // 1.下载插件并导入
 
-import { getUsersInfoAPI } from '@/api/index'
+// import { getUsersInfoAPI } from '@/api/index'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     // 1. 编写变量
-    token: '',
-    userInfo: {}
+    token: ''
+    // userInfo: {}
   },
   getters: {
-    nickname (state) {
-      return state.userInfo.nickname
-      //  完整写法
-    },
-    // 简写
-    username: (state) => state.userInfo.username,
-    user_pic: (state) => state.userInfo.user_pic
+    // nickname (state) {
+    //   return state.userInfo.nickname
+    //   //  完整写法
+    // },
+    // // 简写
+    // username: (state) => state.userInfo.username,
+    // user_pic: (state) => state.userInfo.user_pic
   },
   mutations: {
     // 2. 保存 token 的 mutation 函数
     // 编写操作变量的函数
     updateToken (state, newToken) {
       state.token = newToken
-    },
-    updateUserInfo (state, userInfo) {
-      state.userInfo = userInfo
     }
+    // updateUserInfo (state, userInfo) {
+    //   state.userInfo = userInfo
+    // }
   },
   actions: {
     // 定义初始化用户基本信息的 action 函数
     async initUserInfo (store) {
-      const { data: res } = await getUsersInfoAPI()
-      if (res.code === 0) {
-        store.commit('updateUserInfo', res.data)
-      }
+      // const { data: res } = await getUsersInfoAPI()
+      // if (res.code === 0) {
+      //   store.commit('updateUserInfo', res.data)
+      // }
     }
   },
   modules: {},
