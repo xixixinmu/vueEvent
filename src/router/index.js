@@ -21,27 +21,8 @@ const routes = [
     component: () => import('@/views/login')
   },
   {
-    path: '/admin',
-    component: () => import('@/views/adminHome'),
-    redirect: '/statistics',
-    children: [
-      {
-        path: '/user-avatar',
-        component: () => import('@/views/user-avatar')
-      },
-      {
-        path: '/statistics',
-        component: () => import('@/components/AdminHome/Statistics.vue')
-      },
-      {
-        path: '/addDelivery',
-        component: () => import('@/components/AdminHome/AddDelivery.vue')
-      }
-    ]
-  },
-  {
-    path: '/user',
-    component: () => import('@/views/userHome/index.vue'),
+    path: '/layout',
+    component: () => import('@/views/layout'),
     redirect: '/addDelivery',
     children: [
       {
@@ -49,48 +30,16 @@ const routes = [
         component: () => import('@/views/user-avatar')
       },
       {
-        path: '/addDelivery',
-        component: () => import('@/components/AdminHome/AddDelivery.vue')
-      }
-    ]
-  },
-  {
-    path: '/layout',
-    component: () => import('@/views/layout'),
-    // 路由懒加载方式
-    redirect: '/home',
-    children: [
-      {
-        path: '/home',
-        component: () => import('@/views/home')
-      },
-      {
-        path: '/user-info',
-        component: () => import('@/views/user-info')
-      },
-      {
-        path: '/user-avatar',
-        component: () => import('@/views/user-avatar')
-      },
-      {
-        path: '/user-pwd',
-        component: () => import('@/views/user-pwd')
-      },
-      {
-        path: '/art-cate',
-        component: () => import('@/views/art-cate')
-      },
-      {
-        path: '/art-list',
-        component: () => import('@/views/art-list')
-      },
-      {
         path: '/statistics',
         component: () => import('@/components/AdminHome/Statistics.vue')
       },
       {
         path: '/addDelivery',
         component: () => import('@/components/AdminHome/AddDelivery.vue')
+      },
+      {
+        path: '/edit-express',
+        component: () => import('@/components/edit-express/editExpress')
       }
     ]
   }
@@ -113,7 +62,6 @@ router.beforeEach((to, from, next) => {
     if (!store.state.userInfo.username) {
       // 有token但是没有用户信息, 才去请求用户信息保存到vuex里
       // 调用actions里方法请求数据
-      store.dispatch('initUserInfo')
       // 下次切换页面vuex里有用户信息数据就不会重复请求用户信息
     }
     next() // 路由放行

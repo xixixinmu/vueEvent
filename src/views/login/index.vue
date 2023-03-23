@@ -35,7 +35,7 @@
 <script>
 import { loginAPI } from '@/api/index'
 import validateCode from '@/components/Login/validateCode.vue'
-import { mapMutations, mapActions } from 'vuex'
+import { mapMutations } from 'vuex'
 // 导入mutation中写的函数
 export default {
   name: 'LoginPage',
@@ -91,8 +91,7 @@ export default {
   },
   methods: {
     // 扩展运算符导入函数
-    ...mapMutations(['updateToken']),
-    ...mapActions(['initUserInfo']),
+    ...mapMutations(['updateToken', 'updateIsAdmin', 'updateUsername']),
     loginFn () {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
@@ -106,23 +105,15 @@ export default {
           } else {
             this.$message.success('登录成功')
             this.updateToken(res.token)
-            console.log(res.isAdmin)
-            if (res.isAdmin === 0) {
-              // this.$router.push('/user-avatar')
-              this.$router.push('/admin')
-              // 调用mutation中的方法
-              this.initUserInfo()
-            } else {
-              // this.$router.push('/user-avatar')
-              this.$router.push('/user')
-              // 调用mutation中的方法
-              this.initUserInfo()
-            }
+            this.updateIsAdmin(res.isAdmin)
+            this.updateUsername(this.form.username)
+            this.$router.push('/layout')
           }
         } else {
           return false
           // 阻止表单默认提交行为
         }
+        //
       })
     },
     goRegister () {

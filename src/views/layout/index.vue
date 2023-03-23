@@ -2,7 +2,7 @@
   <el-container class="main-container">
     <!-- 头部区域 -->
     <el-header>
-      <img src="@/assets/logo.png" alt="" />
+      <div class="webTitle">昊目智能网站</div>
       <el-menu
         class="el-menu-top"
         mode="horizontal"
@@ -10,21 +10,6 @@
         text-color="#fff"
         active-text-color="#409EFF"
       >
-        <!-- <el-submenu index="1">
-          <template slot="title">
-            <img :src="$store.state.userInfo.user_pic" alt="" class="avatar" />
-            <span>个人中心</span>
-          </template>
-          <el-menu-item index="1-1"
-            ><i class="el-icon-s-operation"></i>基本资料</el-menu-item
-          >
-          <el-menu-item index="1-2"
-            ><i class="el-icon-camera"></i>更换头像</el-menu-item
-          >
-          <el-menu-item index="1-3"
-            ><i class="el-icon-key"></i>重置密码</el-menu-item
-          >
-        </el-submenu> -->
         <el-menu-item index="2" @click="logoutFn"
           ><i class="el-icon-switch-button"></i>退出</el-menu-item
         >
@@ -36,9 +21,7 @@
       <!-- 侧边栏用户信息区域 -->
       <el-aside width="200px">
         <div class="user-box">
-          <img :src="user_pic" alt="" v-if="user_pic" />
-          <img src="@/assets/logo.png" v-else />
-          <span>欢迎 {{ nickname || username }}</span>
+          <span>欢迎 {{ $store.state.username }}</span>
         </div>
         <!-- 侧边栏导航菜单 -->
 
@@ -116,7 +99,7 @@ export default {
     this.setMenuListFn()
   },
   methods: {
-    ...mapMutations(['updateToken', 'updateUserInfo']),
+    ...mapMutations(['updateToken', 'updateIsAdmin', 'updateUsername']),
     logoutFn () {
       // 退出登录的逻辑：增加确认提示，去除token，强制跳转
       this.$confirm('是否退出登录？', '提示', {
@@ -130,7 +113,8 @@ export default {
             message: '已退出登录'
           })
           this.$store.commit('updateToken', '')
-          this.$store.commit('updateUserInfo', {})
+          this.$store.commit('updateIsAdmin', '')
+          this.$store.commit('updateUsername', '')
           this.$router.push('/login')
         })
         .catch(() => {
@@ -147,30 +131,40 @@ export default {
       console.log(key, keyPath)
     },
     setMenuListFn () {
-      this.menus = [
-        {
-          icon: 'el-icon-s-cooperation',
-          indexPath: '/statistics',
-          title: '统计功能'
-        },
-        {
-          icon: 'el-icon-s-cooperation',
-          indexPath: '/addDelivery',
-          title: '添加快件'
-        },
-        {
-          icon: 'el-icon-s-cooperation',
-          indexPath: '/user-avatar',
-          title: '管理快件'
-          // children: [
-          //   {
-          //     icon: 'el-icon-camera',
-          //     indexPath: '/user-avatar',
-          //     title: '操作快件'
-          //   }
-          // ]
-        }
-      ]
+      const isAdmin = JSON.parse(localStorage.getItem('vuex')).isAdmin
+      // console.log()
+      if (isAdmin === 0) {
+        this.menus = [
+          {
+            icon: 'el-icon-s-cooperation',
+            indexPath: '/addDelivery',
+            title: '添加快件'
+          },
+          {
+            icon: 'el-icon-s-cooperation',
+            indexPath: '/user-avatar',
+            title: '管理快件'
+          }
+        ]
+      } else {
+        this.menus = [
+          {
+            icon: 'el-icon-s-cooperation',
+            indexPath: '/addDelivery',
+            title: '添加快件'
+          },
+          {
+            icon: 'el-icon-s-cooperation',
+            indexPath: '/user-avatar',
+            title: '管理快件'
+          },
+          {
+            icon: 'el-icon-s-cooperation',
+            indexPath: '/statistics',
+            title: '统计功能'
+          }
+        ]
+      }
     }
   }
 }
@@ -179,6 +173,15 @@ export default {
 <style lang="less" scoped>
 .main-container {
   height: 100%;
+  .webTitle{
+    font-family: fangsong;
+    color: white;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
   .el-header,
   .el-aside {
     background-color: #23262e;

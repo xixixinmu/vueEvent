@@ -44,7 +44,8 @@ myAxios.interceptors.response.use(
       // 本次响应是token过期了
       // 清除vuex里一切，然后切换回到登录页面（被动退出登录状态)
       store.commit('updateToken', '')
-      store.commit('updateUserInfo', {})
+      store.commit('updateIsAdmin', '')
+      store.commit('updateUsername', '')
       router.push('/login')
       Message.error('身份信息已过期，请重新登录')
     }

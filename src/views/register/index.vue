@@ -2,38 +2,38 @@
   <div class="register_background">
     <div class="register_box">
       <div class="title_box"></div>
-      <el-form ref="form" :model="form" :rules="rules">
-        <el-form-item prop="realName">
+      <el-form ref="form" :model="form" :rules="rules" label-width="70px" label-position="left">
+        <el-form-item prop="realName" label="真实姓名">
           <el-input
             placeholder="请输入真实姓名"
             v-model="form.realName"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="phone">
+        <el-form-item prop="phone" label="手机号">
           <el-input
             placeholder="请输入手机号"
             v-model="form.phone"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="IDcard">
+        <el-form-item prop="idCard" label="身份证号">
           <el-input
             placeholder="请输入身份证号码"
-            v-model="form.IDcard"
+            v-model="form.idCard"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="username">
+        <el-form-item prop="username" label="用户名">
           <el-input
             placeholder="请输入用户名"
             v-model="form.username"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="storeName">
+        <el-form-item prop="storeName" label="门面名称">
           <el-input
             placeholder="请输入门面名称"
             v-model="form.storeName"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="password">
+        <el-form-item prop="password" label="密码">
           <el-input
             placeholder="请输入密码"
             type="password"
@@ -41,7 +41,7 @@
             show-password
           ></el-input>
         </el-form-item>
-        <el-form-item prop="repassword">
+        <el-form-item prop="repassword" label="确认密码">
           <el-input
             type="password"
             placeholder="请确认密码"
@@ -49,13 +49,11 @@
             show-password
           ></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" style="width: 100%" @click="registerFn"
-            >注册</el-button
-          >
-          <el-link type="info" @click="goLogin">去登录</el-link>
-        </el-form-item>
       </el-form>
+      <el-button type="primary" style="width: 100%" @click="registerFn"
+        >注册</el-button
+      >
+      <el-link type="info" @click="goLogin">去登录</el-link>
     </div>
   </div>
 </template>
@@ -79,7 +77,7 @@ export default {
         realName: '',
         username: '',
         phone: '',
-        IDcard: '',
+        idCard: '',
         storeName: '',
         password: '',
         repassword: ''
@@ -97,7 +95,7 @@ export default {
             trigger: 'blur'
           }
         ],
-        IDcard: [
+        idCard: [
           { required: true, message: '身份证号码不能为空', trigger: 'blur' },
           {
             pattern: /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
@@ -142,15 +140,16 @@ export default {
           // 通过校验
 
           // 把axios返回的数据对象data中的值存在res里
-          const { data: res } = await registerAPI(this.form)
-          if (res.code !== 0) {
-            // code为0成功 1异常
-            return this.$message.error(res.message)
-            // $message为elementUI封装的弹窗
-          } else {
-            this.$message.success(res.message)
-            this.$router.push('./login')
-          }
+          const res = await registerAPI(this.form)
+          console.log(res)
+          // if (res.code !== 0) {
+          //   // code为0成功 1异常
+          //   return this.$message.error(res.message)
+          //   // $message为elementUI封装的弹窗
+          // } else {
+          //   this.$message.success(res.message)
+          //   this.$router.push('./login')
+          // }
         } else {
           return false
           // 阻止表单默认提交行为

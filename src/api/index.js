@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export const registerAPI = ({ username, password, realName, phone, IDcard, storeName, isAdmin }) => {
+export const registerAPI = ({ username, password, realName, phone, idCard, storeName }) => {
   // 结构赋值传参，调用这个函数传参可以直接传整个对象
 
   // 原地是一个Promise对象(内部包含原生ajax请求)
@@ -14,7 +14,7 @@ export const registerAPI = ({ username, password, realName, phone, IDcard, store
       password,
       realName,
       phone,
-      IDcard,
+      idCard,
       storeName
       // 为了语义明确 不然可以直接传obj
     }
@@ -43,18 +43,11 @@ export const statisticsAPI = (page, pageSize) => {
   })
 }
 
-export const addDelivery = ({ avatar, tags }, brief) => {
-  console.log(avatar)
-  console.log(tags)
-  console.log(brief)
+export const addDelivery = (formData) => {
   return request({
     url: '/api/add',
     method: 'POST',
-    data: {
-      avatar,
-      brief,
-      tags
-    }
+    data: formData
   })
 }
 
@@ -87,63 +80,6 @@ export const updateDelivery = ({ avatar, tags }, brief) => {
       avatar,
       brief,
       tags
-    }
-  })
-}
-
-export const getUsersInfoAPI = () => {
-  // 原地是一个Promise对象(内部包含原生ajax请求)
-  // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
-  return request({
-    url: '/my/userinfo',
-    method: 'GET'
-  })
-}
-
-export const updateUserinfoAPI = ({
-  id,
-  username,
-  nickname,
-  email,
-  user_pic
-}) => {
-  // 原地是一个Promise对象(内部包含原生ajax请求)
-  // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
-  return request({
-    url: '/my/userinfo',
-    method: 'PUT',
-    data: {
-      id,
-      username,
-      nickname,
-      email,
-      user_pic
-    }
-  })
-}
-
-export const updateUserAvatarAPI = (avatar) => {
-  // 原地是一个Promise对象(内部包含原生ajax请求)
-  // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
-  return request({
-    url: '/my/update/avatar',
-    method: 'PATCH',
-    data: {
-      avatar
-    }
-  })
-}
-
-export const updateUserPwdAPI = ({ old_pwd, new_pwd, re_pwd }) => {
-  // 原地是一个Promise对象(内部包含原生ajax请求)
-  // return这个Promise对象到逻辑页面，去那边对Promise对象提取结果
-  return request({
-    url: '/my/updatepwd',
-    method: 'PATCH',
-    data: {
-      old_pwd,
-      new_pwd,
-      re_pwd
     }
   })
 }
