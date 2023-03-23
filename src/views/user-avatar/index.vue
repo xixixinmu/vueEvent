@@ -33,18 +33,18 @@
       <template slot-scope="scope">
         <div style="display:flex">
           <div>
-            <el-image style="width: 100%; height: 100px" :src="scope.row.address" :preview-src-list="scope.row.srcList" :key="scope.row.id">
+            <el-image style="width: 100%; height: 100px" :src="scope.row.address?scope.row.address:''" :preview-src-list="scope.row.srcList?scope.row.srcList:[]" :key="scope.row.id">
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline"></i>
             </div>
           </el-image>
           </div>
           <div style="margin-left:10px">
-            <div>分类：{{scope.row.goodsType}}</div>
-            <div>名称：{{scope.row.goodsName}}</div>
-            <div>数量：{{scope.row.goodsNum}}</div>
-            <div>颜色：{{scope.row.goodsColor}}</div>
-            <div>重量：{{scope.row.goodsWeight}}</div>
+            <div>分类：{{scope.row.type2}}</div>
+            <div>名称：{{scope.row.description}}</div>
+            <div>数量：{{scope.row.number}}</div>
+            <div>颜色：{{scope.row.color}}</div>
+            <div>重量：{{scope.row.weight}}</div>
           </div>
         </div>
       </template>
@@ -52,26 +52,26 @@
     <el-table-column label="发现细节">
       <template slot-scope="scope">
         <div>发现时间：{{scope.row.findTime}}</div>
-        <div>发现环节：{{scope.row.findPart}}</div>
-        <div>发现人员：{{scope.row.findPerson}}</div>
+        <div>发现环节：{{scope.row.discoverLink}}</div>
+        <div>发现人员：{{scope.row.findPeople}}</div>
       </template>
     </el-table-column>
     <el-table-column label="登记细节">
       <template slot-scope="scope">
-        <div>登记时间：{{scope.row.recordTime}}</div>
-        <div>登记单位：{{scope.row.recordHospital}}</div>
-        <div>简登人员：{{scope.row.firstRecordPerson}}</div>
-        <div>补登人员：{{scope.row.lastRecordPerson}}</div>
-        <div>联系电话：{{scope.row.phone}}</div>
+        <div>登记时间：{{scope.row.datetime}}</div>
+        <div>登记单位：{{scope.row.unit}}</div>
+        <div>简登人员：{{scope.row.datePeople}}</div>
+        <div>补登人员：{{scope.row.retroactivePeople}}</div>
+        <div>联系电话：{{scope.row.telphone}}</div>
       </template>
     </el-table-column>
     <el-table-column label="其他信息">
       <template slot-scope="scope">
-        <div>无面单编号：{{scope.row.noExpressSheet}}</div>
-        <div>快件遗落类型：{{scope.row.goodsLoseType}}</div>
+        <div>无面单编号：{{scope.row.ID}}</div>
+        <div>快件遗落类型：{{scope.row.type1}}</div>
         <div>进/出港：{{scope.row.port}}</div>
-        <div>车辆运输号：{{scope.row.carID}}</div>
-        <div>上一站编码：{{scope.row.previousCode}}</div>
+        <div>车辆运输号：{{scope.row.transportNumber}}</div>
+        <div>上一站编码：{{scope.row.formerCode}}</div>
       </template>
     </el-table-column>
     <el-table-column label="操作">
@@ -92,8 +92,8 @@ export default {
   name: 'user-avatar',
   data () {
     return {
+      images: [],
       baseURL: baseURL,
-      newAvatar: '',
       formData: {},
       tableData: [{ previousCode: '1' }]
     }

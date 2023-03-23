@@ -9,8 +9,8 @@
           <el-step title="其他信息"></el-step>
         </el-steps>
       </div>
-      <div class="first_tab" v-if="active === 0">
-        <el-form ref="delivery" :model="delivery" :rules="rules" label-width="100px">
+      <div class="first_tab" v-show="active === 0">
+        <el-form ref="delivery1" :model="delivery" :rules="rules" label-width="100px">
           <el-form-item label="内件信息" prop="description">
             <el-input v-model="delivery.description"></el-input>
           </el-form-item>
@@ -33,7 +33,7 @@
             :auto-upload='false'
             accept="jpg,png,bmp"
             list-type="picture-card"
-            :file-list='images'
+            :file-list='delivery.images'
             :on-change="handleChange"
             :limit="8"
             >
@@ -42,13 +42,13 @@
           </el-form-item>
         </el-form>
         <div class="step_btn">
-          <el-button style="margin-top: 12px" @click="nextToAttr('delivery')"
+          <el-button style="margin-top: 12px" @click="nextToAttr('delivery1')"
             >下一步</el-button
           >
         </div>
       </div>
-      <div class="second_tab" v-if="active === 1">
-        <el-form ref="delivery" :model="delivery" :rules="rules" label-width="80px">
+      <div class="second_tab" v-show="active === 1">
+        <el-form ref="delivery2" :model="delivery" :rules="rules" label-width="80px">
           <el-form-item label="发现时间" prop="findTime">
             <el-col :span="12">
               <el-date-picker
@@ -68,13 +68,13 @@
         </el-form>
         <div class="step_btn">
             <el-button style="margin-top: 12px" @click="prev">上一步</el-button>
-          <el-button style="margin-top: 12px" @click="nextToAttr('delivery')"
+          <el-button style="margin-top: 12px" @click="nextToAttr('delivery2')"
             >下一步</el-button
           >
         </div>
       </div>
-      <div class="third_tab" v-if="active === 2">
-        <el-form ref="delivery" :model="delivery" :rules="rules" label-width="80px">
+      <div class="third_tab" v-show="active === 2">
+        <el-form ref="delivery3" :model="delivery" :rules="rules" label-width="80px">
           <el-form-item label="登记时间" prop="datetime">
             <el-col :span="12">
               <el-date-picker
@@ -85,28 +85,28 @@
               ></el-date-picker>
             </el-col>
           </el-form-item>
-          <el-form-item label="联系电话" prop="telphone">
-            <el-input v-model="delivery.telphone"></el-input>
+          <el-form-item label="登记单位" prop="unit">
+            <el-input v-model="delivery.unit"></el-input>
           </el-form-item>
           <el-form-item label="简登人员" prop="datePeople">
             <el-input v-model="delivery.datePeople"></el-input>
           </el-form-item>
-          <el-form-item label="登记单位" prop="unit">
-            <el-input v-model="delivery.unit"></el-input>
-          </el-form-item>
           <el-form-item label="补登人员" prop="retroactivePeople">
             <el-input v-model="delivery.retroactivePeople"></el-input>
+          </el-form-item>
+          <el-form-item label="联系电话" prop="telphone">
+            <el-input v-model="delivery.telphone"></el-input>
           </el-form-item>
         </el-form>
         <div class="step_btn">
             <el-button style="margin-top: 12px" @click="prev">上一步</el-button>
-          <el-button style="margin-top: 12px" @click="nextToAttr('delivery')"
+          <el-button style="margin-top: 12px" @click="nextToAttr('delivery3')"
             >下一步</el-button
           >
         </div>
       </div>
-      <div class="markdown_tab" v-if="active === 3">
-        <el-form ref="delivery" :model="delivery" :rules="rules" label-width="100px">
+      <div class="markdown_tab" v-show="active === 3">
+        <el-form ref="delivery4" :model="delivery" :rules="rules" label-width="100px">
           <el-form-item label="无面单编号" prop="ID">
             <el-input v-model="delivery.ID"></el-input>
           </el-form-item>
@@ -147,7 +147,6 @@ export default {
   data () {
     return {
       baseURL,
-      images: [],
       avatar: '',
       newAvatar: '',
       myHeader: {
@@ -160,6 +159,7 @@ export default {
         datetime: '',
         telphone: '',
         weight: '',
+        images: [],
         description: '',
         findTime: '',
         port: '',
