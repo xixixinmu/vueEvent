@@ -15,10 +15,10 @@
             v-model="form.phone"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="IDcard">
+        <el-form-item prop="idCard">
           <el-input
             placeholder="请输入身份证号码"
-            v-model="form.IDcard"
+            v-model="form.idCard"
           ></el-input>
         </el-form-item>
         <el-form-item prop="username">
@@ -79,7 +79,7 @@ export default {
         realName: '',
         username: '',
         phone: '',
-        IDcard: '',
+        idCard: '',
         storeName: '',
         password: '',
         repassword: ''
@@ -97,7 +97,7 @@ export default {
             trigger: 'blur'
           }
         ],
-        IDcard: [
+        idCard: [
           { required: true, message: '身份证号码不能为空', trigger: 'blur' },
           {
             pattern: /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
@@ -143,12 +143,12 @@ export default {
 
           // 把axios返回的数据对象data中的值存在res里
           const { data: res } = await registerAPI(this.form)
-          if (res.code !== 0) {
+          if (res.code !== 1) {
             // code为0成功 1异常
-            return this.$message.error(res.message)
+            return this.$message.error('注册失败！')
             // $message为elementUI封装的弹窗
           } else {
-            this.$message.success(res.message)
+            this.$message.success('注册成功！')
             this.$router.push('./login')
           }
         } else {
@@ -185,6 +185,7 @@ body {
       width: 485px;
       height: 600px;
       background-color: #fff;
+      opacity: 0.8;
       padding: 0 30px;
       border-radius: 5px;
       .title_box {

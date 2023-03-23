@@ -2,7 +2,7 @@
     <el-container class="main-container">
       <!-- 头部区域 -->
       <el-header>
-        <img src="@/assets/logo.jpg" style="width: 200px; height: 100%;" alt="" />
+        <img src="@/assets/logo1.png" style="width: 150px; height: 100%; margin-left: 10px;" alt="" />
         <el-menu
           class="el-menu-top"
           mode="horizontal"
@@ -38,7 +38,8 @@
           <div class="user-box">
             <img :src="user_pic" alt="" v-if="user_pic" />
             <img src="@/assets/logo.png" v-else />
-            <span>欢迎 {{ nickname || username }}</span>
+            <!-- <span>欢迎 {{ nickname || username }}</span> -->
+            <span>欢迎{{ $store.state.username }}</span>
           </div>
           <!-- 侧边栏导航菜单 -->
 
@@ -155,12 +156,12 @@ export default {
         },
         {
           icon: 'el-icon-s-cooperation',
-          indexPath: '/addDelivery',
+          indexPath: '/adminAddDelivery',
           title: '添加快件'
         },
         {
           icon: 'el-icon-s-cooperation',
-          indexPath: '/user-avatar',
+          indexPath: '/admin-avatar',
           title: '管理快件'
           // children: [
           //   {
@@ -181,10 +182,10 @@ export default {
     height: 100%;
     .el-header,
     .el-aside {
-      background-color:#fff;
+      background-color:#000;
     }
     .el-header {
-      background-color: #fff;
+      background-color: #000;
       padding: 0;
       display: flex;
       justify-content: space-between;

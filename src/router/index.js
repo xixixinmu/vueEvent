@@ -26,7 +26,7 @@ const routes = [
     redirect: '/statistics',
     children: [
       {
-        path: '/user-avatar',
+        path: '/admin-avatar',
         component: () => import('@/views/user-avatar')
       },
       {
@@ -34,7 +34,7 @@ const routes = [
         component: () => import('@/components/AdminHome/Statistics.vue')
       },
       {
-        path: '/addDelivery',
+        path: '/adminAddDelivery',
         component: () => import('@/components/AdminHome/AddDelivery.vue')
       }
     ]
@@ -42,14 +42,14 @@ const routes = [
   {
     path: '/user',
     component: () => import('@/views/userHome/index.vue'),
-    redirect: '/addDelivery',
+    redirect: '/userAddDelivery',
     children: [
       {
         path: '/user-avatar',
         component: () => import('@/views/user-avatar')
       },
       {
-        path: '/addDelivery',
+        path: '/userAddDelivery',
         component: () => import('@/components/AdminHome/AddDelivery.vue')
       }
     ]

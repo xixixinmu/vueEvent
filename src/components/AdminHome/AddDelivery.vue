@@ -153,7 +153,10 @@ export default {
       myHeader: {
         Authorization: ''
       },
-      formData: {},
+      formData: {
+        avatar: '',
+        tags: ''
+      },
       active: 0, // 激活的过程卡片选择器
       delivery: {
         ID: '',
@@ -314,23 +317,30 @@ export default {
         const formData = new FormData()
         formData.append('avatar', file[0])
         formData.append('tags', '100,11')
-        this.formData = formData
+        this.formData.avatar = formData.get('avatar')
+        this.formData.tags = formData.get('tags')
       }
     },
     async onSubmit () {
-      if (!this.delivery) {
-        const { data: res } = await addDelivery(this.formData, this.delivery)
-        if (res.code === 0) {
-          this.$message({
-            type: 'success',
-            message: res.message
-          })
-        } else {
-          this.$message({
-            type: 'warning',
-            message: res.message
-          })
-        }
+      if (this.delivery) {
+        // const { data: res } = await addDelivery(this.formData, this.delivery)
+        // if (res.code === 0) {
+        //   return this.$message({
+        //     type: 'success',
+        //     message: '添加成功'
+        //   })
+        // } else {
+        //   return this.$message({
+        //     type: 'warning',
+        //     message: '添加失败'
+        //   })
+        // }
+        await addDelivery(this.formData, this.delivery)
+        console.log('123')
+        return this.$message({
+          type: 'success',
+          message: '添加成功'
+        })
       }
     }
   },

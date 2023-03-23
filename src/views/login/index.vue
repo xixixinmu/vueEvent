@@ -108,12 +108,10 @@ export default {
             this.updateToken(res.token)
             console.log(res.isAdmin)
             if (res.isAdmin === 0) {
-              // this.$router.push('/user-avatar')
               this.$router.push('/admin')
               // 调用mutation中的方法
               this.initUserInfo()
             } else {
-              // this.$router.push('/user-avatar')
               this.$router.push('/user')
               // 调用mutation中的方法
               this.initUserInfo()
@@ -165,6 +163,7 @@ body {
       width: 400px;
       height: 350px;
       background-color: #fff;
+      opacity: 0.8;
       padding: 0 30px;
       border-radius: 5px;
       .title_box {

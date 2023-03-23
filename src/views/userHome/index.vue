@@ -2,7 +2,7 @@
     <el-container class="main-container">
       <!-- 头部区域 -->
       <el-header>
-        <img src="@/assets/logo.jpg" style="width: 200px; height: 100%;" alt="" />
+        <img src="@/assets/logo1.png" style="width: 200px; height: 100%;" alt="" />
         <el-menu
           class="el-menu-top"
           mode="horizontal"
@@ -150,7 +150,7 @@ export default {
       this.menus = [
         {
           icon: 'el-icon-s-cooperation',
-          indexPath: '/addDelivery',
+          indexPath: '/userAddDelivery',
           title: '添加快件'
         },
         {

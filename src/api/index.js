@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export const registerAPI = ({ username, password, realName, phone, IDcard, storeName, isAdmin }) => {
+export const registerAPI = ({ username, password, realName, phone, idCard, storeName }) => {
   // 结构赋值传参，调用这个函数传参可以直接传整个对象
 
   // 原地是一个Promise对象(内部包含原生ajax请求)
@@ -14,7 +14,7 @@ export const registerAPI = ({ username, password, realName, phone, IDcard, store
       password,
       realName,
       phone,
-      IDcard,
+      idCard,
       storeName
       // 为了语义明确 不然可以直接传obj
     }
