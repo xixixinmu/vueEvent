@@ -40,38 +40,38 @@
           </el-image>
           </div>
           <div style="margin-left:10px">
-            <div>分类：{{scope.row.type2}}</div>
-            <div>名称：{{scope.row.description}}</div>
-            <div>数量：{{scope.row.number}}</div>
-            <div>颜色：{{scope.row.color}}</div>
-            <div>重量：{{scope.row.weight}}</div>
+            <div>分类：{{scope.row.stuffType}}</div>
+            <div>名称：{{scope.row.inInfo}}</div>
+            <div>数量：{{scope.row.inNum}}</div>
+            <div>颜色：{{scope.row.inColor}}</div>
+            <div>重量：{{scope.row.stuffWeight}}</div>
           </div>
         </div>
       </template>
     </el-table-column>
     <el-table-column label="发现细节">
       <template slot-scope="scope">
-        <div>发现时间：{{scope.row.findTime}}</div>
+        <div>发现时间：{{scope.row.discoverTime}}</div>
         <div>发现环节：{{scope.row.discoverLink}}</div>
-        <div>发现人员：{{scope.row.findPeople}}</div>
+        <div>发现人员：{{scope.row.discoverer}}</div>
       </template>
     </el-table-column>
     <el-table-column label="登记细节">
       <template slot-scope="scope">
-        <div>登记时间：{{scope.row.datetime}}</div>
-        <div>登记单位：{{scope.row.unit}}</div>
-        <div>简登人员：{{scope.row.datePeople}}</div>
-        <div>补登人员：{{scope.row.retroactivePeople}}</div>
-        <div>联系电话：{{scope.row.telphone}}</div>
+        <div>登记时间：{{scope.row.registrationTime}}</div>
+        <div>登记单位：{{scope.row.registrationUnit}}</div>
+        <div>简登人员：{{scope.row.simpleRegistrant}}</div>
+        <div>补登人员：{{scope.row.supRegistrant}}</div>
+        <div>联系电话：{{scope.row.phone}}</div>
       </template>
     </el-table-column>
     <el-table-column label="其他信息">
       <template slot-scope="scope">
-        <div>无面单编号：{{scope.row.ID}}</div>
-        <div>快件遗落类型：{{scope.row.type1}}</div>
-        <div>进/出港：{{scope.row.port}}</div>
-        <div>车辆运输号：{{scope.row.transportNumber}}</div>
-        <div>上一站编码：{{scope.row.formerCode}}</div>
+        <div>无面单编号：{{scope.row.picID}}</div>
+        <div>快件遗落类型：{{scope.row.loseType}}</div>
+        <div>进/出港：{{scope.row.Inout}}</div>
+        <div>车辆运输号：{{scope.row.carId}}</div>
+        <div>上一站编码：{{scope.row.preStation}}</div>
       </template>
     </el-table-column>
     <el-table-column label="操作">

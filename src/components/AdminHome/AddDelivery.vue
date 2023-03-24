@@ -11,20 +11,20 @@
       </div>
       <div class="first_tab" v-show="active === 0">
         <el-form ref="delivery1" :model="delivery" :rules="rules" label-width="100px">
-          <el-form-item label="内件信息" prop="description">
-            <el-input v-model="delivery.description"></el-input>
+          <el-form-item label="内件信息" prop="inInfo">
+            <el-input v-model="delivery.inInfo"></el-input>
           </el-form-item>
-          <el-form-item label="物件类别" prop="type2">
-            <el-input v-model="delivery.type2"></el-input>
+          <el-form-item label="物件类别" prop="stuffType">
+            <el-input v-model="delivery.stuffType"></el-input>
           </el-form-item>
-          <el-form-item label="物品重量" prop="weight">
-            <el-input v-model="delivery.weight"></el-input>
+          <el-form-item label="物品重量" prop="stuffWeight">
+            <el-input v-model="delivery.stuffWeight"></el-input>
           </el-form-item>
-          <el-form-item label="内件颜色" prop="color">
-            <el-input v-model="delivery.color"></el-input>
+          <el-form-item label="内件颜色" prop="inColor">
+            <el-input v-model="delivery.inColor"></el-input>
           </el-form-item>
-          <el-form-item label="内件个数" prop="number">
-            <el-input v-model="delivery.number"></el-input>
+          <el-form-item label="内件个数" prop="inNum">
+            <el-input v-model="delivery.inNum"></el-input>
           </el-form-item>
           <el-form-item label="上传物品图片" required>
             <el-upload
@@ -33,7 +33,7 @@
             :auto-upload='false'
             accept="jpg,png,bmp"
             list-type="picture-card"
-            :file-list='delivery.images'
+            :file-list='images'
             :on-change="handleChange"
             :limit="8"
             >
@@ -49,12 +49,12 @@
       </div>
       <div class="second_tab" v-show="active === 1">
         <el-form ref="delivery2" :model="delivery" :rules="rules" label-width="80px">
-          <el-form-item label="发现时间" prop="findTime">
+          <el-form-item label="发现时间" prop="discoverTime">
             <el-col :span="12">
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
-                v-model="delivery.findTime"
+                v-model="delivery.discoverTime"
                 style="width: 100%"
               ></el-date-picker>
             </el-col>
@@ -62,8 +62,8 @@
           <el-form-item label="发现环节" prop="discoverLink">
             <el-input v-model="delivery.discoverLink"></el-input>
           </el-form-item>
-          <el-form-item label="发现人员" prop="findPeople">
-            <el-input v-model="delivery.findPeople"></el-input>
+          <el-form-item label="发现人员" prop="discoverer">
+            <el-input v-model="delivery.discoverer"></el-input>
           </el-form-item>
         </el-form>
         <div class="step_btn">
@@ -75,27 +75,27 @@
       </div>
       <div class="third_tab" v-show="active === 2">
         <el-form ref="delivery3" :model="delivery" :rules="rules" label-width="80px">
-          <el-form-item label="登记时间" prop="datetime">
+          <el-form-item label="登记时间" prop="registrationTime">
             <el-col :span="12">
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
-                v-model="delivery.datetime"
+                v-model="delivery.registrationTime"
                 style="width: 100%"
               ></el-date-picker>
             </el-col>
           </el-form-item>
-          <el-form-item label="登记单位" prop="unit">
-            <el-input v-model="delivery.unit"></el-input>
+          <el-form-item label="登记单位" prop="registrationUnit">
+            <el-input v-model="delivery.registrationUnit"></el-input>
           </el-form-item>
-          <el-form-item label="简登人员" prop="datePeople">
-            <el-input v-model="delivery.datePeople"></el-input>
+          <el-form-item label="简登人员" prop="simpleRegistrant">
+            <el-input v-model="delivery.simpleRegistrant"></el-input>
           </el-form-item>
-          <el-form-item label="补登人员" prop="retroactivePeople">
-            <el-input v-model="delivery.retroactivePeople"></el-input>
+          <el-form-item label="补登人员" prop="supRegistrant">
+            <el-input v-model="delivery.supRegistrant"></el-input>
           </el-form-item>
-          <el-form-item label="联系电话" prop="telphone">
-            <el-input v-model="delivery.telphone"></el-input>
+          <el-form-item label="联系电话" prop="phone">
+            <el-input v-model="delivery.phone"></el-input>
           </el-form-item>
         </el-form>
         <div class="step_btn">
@@ -107,20 +107,20 @@
       </div>
       <div class="markdown_tab" v-show="active === 3">
         <el-form ref="delivery4" :model="delivery" :rules="rules" label-width="100px">
-          <el-form-item label="无面单编号" prop="ID">
-            <el-input v-model="delivery.ID"></el-input>
+          <el-form-item label="无面单编号" prop="picID">
+            <el-input v-model="delivery.picID"></el-input>
           </el-form-item>
-          <el-form-item label="进/出港" prop="port">
-            <el-input v-model="delivery.port"></el-input>
+          <el-form-item label="进/出港" prop="Inout">
+            <el-input v-model="delivery.Inout"></el-input>
           </el-form-item>
-          <el-form-item label="快件遗落类型" prop="type1">
-            <el-input v-model="delivery.type1"></el-input>
+          <el-form-item label="快件遗落类型" prop="loseType">
+            <el-input v-model="delivery.loseType"></el-input>
           </el-form-item>
-          <el-form-item label="车辆运输号" prop="transportNumber">
-            <el-input v-model="delivery.transportNumber"></el-input>
+          <el-form-item label="车辆运输号" prop="carId">
+            <el-input v-model="delivery.carId"></el-input>
           </el-form-item>
-          <el-form-item label="上一站编码" prop="formerCode">
-            <el-input v-model="delivery.formerCode"></el-input>
+          <el-form-item label="上一站编码" prop="preStation">
+            <el-input v-model="delivery.preStation"></el-input>
           </el-form-item>
         </el-form>
         <div class="step_btn">
@@ -147,86 +147,86 @@ export default {
   data () {
     return {
       baseURL,
-      avatar: '',
+      avatar: [],
+      images: [],
       newAvatar: '',
       myHeader: {
         Authorization: ''
       },
       active: 0, // 激活的过程卡片选择器
       delivery: {
-        ID: '',
-        findPeople: '',
-        datetime: '',
-        telphone: '',
-        weight: '',
-        images: [],
-        description: '',
-        findTime: '',
-        port: '',
-        datePeople: '',
-        type1: '',
-        number: '',
-        transportNumber: '',
+        picID: '',
+        discoverer: '',
+        registrationTime: '',
+        phone: '',
+        stuffWeight: '',
+        inInfo: '',
+        discoverTime: '',
+        Inout: '',
+        simpleRegistrant: '',
+        loseType: '',
+        inNum: '',
+        carId: '',
         discoverLink: '',
-        unit: '',
-        retroactivePeople: '',
-        type2: '',
-        color: '',
-        formerCode: ''
+        registrationUnit: '',
+        supRegistrant: '',
+        stuffType: '',
+        inColor: '',
+        preStation: ''
       },
       rules: {
-        ID: [
+        picID: [
           { required: true, message: '请输入无面单编号', trigger: 'blur' }
         ],
-        findPeople: [
+        discoverer: [
           { required: true, message: '请输入发现人员', trigger: 'blur' }
         ],
-        datetime: [
+        registrationTime: [
           { required: true, message: '请选择登记时间', trigger: 'blur' }
         ],
-        telphone: [
+        phone: [
           { required: true, message: '请输入联系电话', trigger: 'blur' }
         ],
-        weight: [
+        stuffWeight: [
           { required: true, message: '请输入物品重量', trigger: 'blur' }
         ],
-        description: [
+        inInfo: [
           { required: true, message: '请输入内件信息', trigger: 'blur' }
         ],
-        findTime: [
+        discoverTime: [
           { required: true, message: '请选择发现时间', trigger: 'blur' }
         ],
-        port: [
+        Inout: [
           { required: true, message: '请输入进/出港', trigger: 'blur' }
         ],
-        datePeople: [
+        simpleRegistrant: [
           { required: true, message: '请输入简登人员', trigger: 'blur' }
         ],
-        type1: [
+        loseType: [
           { required: true, message: '请输入快件遗落类型', trigger: 'blur' }
         ],
-        number: [
+        inNum: [
           { required: true, message: '请输入内件数量', trigger: 'blur' }
         ],
-        transportNumber: [
+        carId: [
           { required: true, message: '请输入车辆运输号', trigger: 'blur' }
         ],
         discoverLink: [
           { required: true, message: '请输入发现环节', trigger: 'blur' }
         ],
-        unit: [
+        registrationUnit: [
           { required: true, message: '请输入登记单位', trigger: 'blur' }
         ],
-        retroactivePeople: [
+        supRegistrant: [
           { required: true, message: '请输入补登人员', trigger: 'blur' }
         ],
-        type2: [
+        stuffType: [
           { required: true, message: '请输入物品类别', trigger: 'blur' }
         ],
-        color: [
+        inColor: [
           { required: true, message: '请输入内件颜色', trigger: 'blur' }
         ],
-        formerCode: [
+        preStation: [
           { required: true, message: '请输入上一站编码', trigger: 'blur' }
         ]
       }
@@ -277,23 +277,23 @@ export default {
       }
     },
     handleChange (file, fileList) {
-      // const avatar = []
-      // for (let i = 0; i < fileList.length; i++) {
-      //   avatar.push(fileList[i].raw)
-      //   console.log(fileList[i].raw)
-      // }
-      // this.avatar = avatar
-      this.avatar = fileList[0].raw
+      const avatar = []
+      for (let i = 0; i < fileList.length; i++) {
+        avatar.push(fileList[i].raw)
+        console.log(fileList[i].raw)
+      }
+      this.avatar = avatar
+      // this.avatar = fileList[0].raw
     },
     async onSubmit () {
       const formData = new FormData()
       // console.log(this.avatar)
-      formData.append('avatar', this.avatar)
-      formData.append('brief', JSON.stringify(this.delivery))
+      formData.append('avatar', this.avatar[0])
+      formData.append('brief', this.delivery)
       formData.append('tags', '')
       console.log(formData.get('avatar'))
       const { data: res } = await addDelivery(formData)
-      console.log(res)
+      console.log(JSON.parse(res[0]))
       if (res.code === 0) {
         this.$message({
           type: 'success',
