@@ -184,6 +184,7 @@ body {
       width: 485px;
       height: 600px;
       background-color: #fff;
+      opacity: 0.8;
       padding: 0 30px;
       border-radius: 5px;
       .title_box {

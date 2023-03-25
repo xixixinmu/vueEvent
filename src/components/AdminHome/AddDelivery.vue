@@ -75,16 +75,6 @@
       </div>
       <div class="third_tab" v-show="active === 2">
         <el-form ref="delivery3" :model="delivery" :rules="rules" label-width="80px">
-          <el-form-item label="登记时间" prop="registrationTime">
-            <el-col :span="12">
-              <el-date-picker
-                type="date"
-                placeholder="选择日期"
-                v-model="delivery.registrationTime"
-                style="width: 100%"
-              ></el-date-picker>
-            </el-col>
-          </el-form-item>
           <el-form-item label="登记单位" prop="registrationUnit">
             <el-input v-model="delivery.registrationUnit"></el-input>
           </el-form-item>
@@ -157,7 +147,6 @@ export default {
       delivery: {
         picID: '',
         discoverer: '',
-        registrationTime: '',
         phone: '',
         stuffWeight: '',
         inInfo: '',
@@ -180,9 +169,6 @@ export default {
         ],
         discoverer: [
           { required: true, message: '请输入发现人员', trigger: 'blur' }
-        ],
-        registrationTime: [
-          { required: true, message: '请选择登记时间', trigger: 'blur' }
         ],
         phone: [
           { required: true, message: '请输入联系电话', trigger: 'blur' }

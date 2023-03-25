@@ -15,13 +15,13 @@
           <template slot-scope="scope">{{ scope.row.id }}</template>
         </el-table-column>
         <el-table-column label="用户名" align="center">
-          <template slot-scope="scope">{{ scope.row.orderId }}</template>
+          <template slot-scope="scope">{{ scope.row.username }}</template>
         </el-table-column>
         <el-table-column label="入库记录数" width="170" align="center">
-          <template slot-scope="scope">{{ scope.row.orderTime }}</template>
+          <template slot-scope="scope">{{ scope.row.recordNumber }}</template>
         </el-table-column>
         <el-table-column label="搜索次数" width="170" align="center">
-          <template slot-scope="scope">{{ scope.row.orderTime }}</template>
+          <template slot-scope="scope">{{ scope.row.searchNumber }}</template>
         </el-table-column>
         <el-table-column
           prop="account"
@@ -29,7 +29,7 @@
           width="190"
           align="center"
         >
-          <template slot-scope="scope">{{ scope.row.orderTime }}</template>
+          <template slot-scope="scope">{{ scope.row.deleteNumber }}</template>
         </el-table-column>
       </el-table>
     </div>
@@ -83,24 +83,10 @@ export default {
       this.getList(this.currentPage, this.page_size)
     },
     // 得到统计列表
-    getList (page, pageSize) {
-      this.loading = false
-      statisticsAPI(page, pageSize)
-        .then((response) => {
-          if (response.code === 200) {
-            this.total = response.total
-            console.log(this.total)
-            this.tableData = response.orderDtoList
-          } else {
-            this.$message({
-              message: response.message,
-              type: 'warning'
-            })
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+    async getList (page, pageSize) {
+      const { data: res } = await statisticsAPI(page, pageSize)
+      console.log(res)
+      this.tableData = JSON.parse(res.data)
     }
   }
 }
