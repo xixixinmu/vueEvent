@@ -95,14 +95,24 @@ export default {
       images: [],
       baseURL: baseURL,
       formData: {},
-      tableData: [{ previousCode: '1' }]
+      tableData: []
     }
   },
   methods: {
     async updateAvatarFn () {
-      const res = await searchPictureAPI(this.formData)
-      console.log(JSON.parse(res.data[0]))
-      this.tableData = JSON.parse(res.data[0]).result
+      const { data: res } = await searchPictureAPI(this.formData)
+      console.log(res)
+      const tableData = []
+      for (let i = 0; i < res.data.length; i++) {
+        let obj = JSON.parse(res.data[i])
+        const address = baseURL + '/' + obj.picPath
+        obj = { ...obj, address }
+        console.log(obj)
+        tableData.push(obj)
+      }
+      this.tableData = tableData
+      // console.log(JSON.parse(res.data))
+      // this.tableData = JSON.parse(res.data)
     },
     limitNum () {
       // alert('只能搜索一张图片')
@@ -116,7 +126,7 @@ export default {
         console.log(file.raw)
         const formData = new FormData()
         formData.append('avatar', file.raw)
-        formData.append('rn', 1)
+        formData.append('rn', 5)
         this.formData = formData
       }
     },

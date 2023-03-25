@@ -52,11 +52,13 @@
           <el-form-item label="发现时间" prop="discoverTime">
             <el-col :span="12">
               <el-date-picker
-                type="date"
-                placeholder="选择日期"
                 v-model="delivery.discoverTime"
+                type="datetime"
+                placeholder="选择日期时间"
                 style="width: 100%"
-              ></el-date-picker>
+                value-format='yyyy-MM-dd HH:mm:ss'
+                >
+              </el-date-picker>
             </el-col>
           </el-form-item>
           <el-form-item label="发现环节" prop="discoverLink">
@@ -100,8 +102,8 @@
           <el-form-item label="无面单编号" prop="picID">
             <el-input v-model="delivery.picID"></el-input>
           </el-form-item>
-          <el-form-item label="进/出港" prop="Inout">
-            <el-input v-model="delivery.Inout"></el-input>
+          <el-form-item label="进/出港" prop="inout">
+            <el-input v-model="delivery.inout"></el-input>
           </el-form-item>
           <el-form-item label="快件遗落类型" prop="loseType">
             <el-input v-model="delivery.loseType"></el-input>
@@ -151,7 +153,7 @@ export default {
         stuffWeight: '',
         inInfo: '',
         discoverTime: '',
-        Inout: '',
+        inout: '',
         simpleRegistrant: '',
         loseType: '',
         inNum: '',
@@ -182,7 +184,7 @@ export default {
         discoverTime: [
           { required: true, message: '请选择发现时间', trigger: 'blur' }
         ],
-        Inout: [
+        inout: [
           { required: true, message: '请输入进/出港', trigger: 'blur' }
         ],
         simpleRegistrant: [
@@ -275,20 +277,42 @@ export default {
       const formData = new FormData()
       // console.log(this.avatar)
       formData.append('avatar', this.avatar[0])
-      formData.append('brief', this.delivery)
+      formData.append('brief', JSON.stringify(this.delivery))
       formData.append('tags', '')
-      console.log(formData.get('avatar'))
       const { data: res } = await addDelivery(formData)
-      console.log(JSON.parse(res[0]))
-      if (res.code === 0) {
+      console.log(res)
+      if (res.code === '200') {
         this.$message({
           type: 'success',
-          message: res.message
+          message: res.msg
         })
+        this.active = 0
+        this.delivery = {
+          picID: '',
+          discoverer: '',
+          registrationTime: '',
+          phone: '',
+          stuffWeight: '',
+          inInfo: '',
+          discoverTime: '',
+          inout: '',
+          simpleRegistrant: '',
+          loseType: '',
+          inNum: '',
+          carId: '',
+          discoverLink: '',
+          registrationUnit: '',
+          supRegistrant: '',
+          stuffType: '',
+          inColor: '',
+          preStation: ''
+        }
+        this.avatar = []
+        this.images = []
       } else {
         this.$message({
           type: 'warning',
-          message: res.message
+          message: res.msg
         })
       }
     }
