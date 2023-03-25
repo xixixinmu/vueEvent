@@ -156,6 +156,7 @@ body {
       width: 400px;
       height: 350px;
       background-color: #fff;
+      opacity: 0.8;
       padding: 0 30px;
       border-radius: 5px;
       .title_box {
