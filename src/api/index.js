@@ -51,36 +51,29 @@ export const addDelivery = (formData) => {
   })
 }
 
-export const searchDelivery = ({ avatar, rn }) => {
+export const searchDelivery = (formData) => {
+  // 如果是一个普通对象，axios会把它转成JSON字符串在请求里体里交给后台
+  // 这个接口文档要求请求体里是一个FormData类型(表单数据对象)携带文件给后台
   return request({
     url: '/api/search',
     method: 'POST',
-    data: {
-      avatar,
-      rn
-    }
+    data: formData
   })
 }
 
-export const deleteDelivery = ({ avatar }) => {
+export const deleteDelivery = (formData) => {
   return request({
     url: '/api/delete',
     method: 'POST',
-    data: {
-      avatar
-    }
+    data: formData
   })
 }
 
-export const updateDelivery = ({ avatar, tags }, brief) => {
+export const updateDelivery = (formData) => {
   return request({
     url: '/api/update',
     method: 'POST',
-    data: {
-      avatar,
-      brief,
-      tags
-    }
+    data: formData
   })
 }
 
@@ -188,15 +181,5 @@ export const deleteArticleAPI = (id) => {
     params: {
       id
     }
-  })
-}
-
-export const searchPictureAPI = (formData) => {
-  // 如果是一个普通对象，axios会把它转成JSON字符串在请求里体里交给后台
-  // 这个接口文档要求请求体里是一个FormData类型(表单数据对象)携带文件给后台
-  return request({
-    url: '/api/search',
-    method: 'POST',
-    data: formData
   })
 }

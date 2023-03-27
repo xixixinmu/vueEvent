@@ -11,7 +11,8 @@ import { Message } from 'element-ui'
 export const baseURL = 'http://124.222.81.137:9090'
 
 const myAxios = axios.create({
-  baseURL
+  baseURL,
+  withCredentials: true
 })
 
 myAxios.interceptors.request.use(
@@ -45,7 +46,7 @@ myAxios.interceptors.response.use(
       // 清除vuex里一切，然后切换回到登录页面（被动退出登录状态)
       store.commit('updateToken', '')
       store.commit('updateIsAdmin', '')
-      store.commit('updateUsername', '')
+      store.commit('updateUser', '')
       router.push('/login')
       Message.error('身份信息已过期，请重新登录')
     }

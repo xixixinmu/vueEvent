@@ -8,26 +8,26 @@
         <div>
           <div class="title">物品细节</div>
           <el-form-item label="物品分类">
-            <el-input v-model="submitData.goodsType"  size="medium"></el-input>
+            <el-input v-model="submitData.stuffType"  size="medium"></el-input>
           </el-form-item>
           <el-form-item label="物品名称">
-            <el-input v-model="submitData.goodsName" size="medium"></el-input>
+            <el-input v-model="submitData.inInfo" size="medium"></el-input>
           </el-form-item>
           <el-form-item label="物品数量">
-            <el-input v-model="submitData.goodsNum" size="medium"></el-input>
+            <el-input v-model="submitData.inNum" size="medium"></el-input>
           </el-form-item>
           <el-form-item label="物品颜色">
-            <el-input v-model="submitData.goodsColor" size="medium"></el-input>
+            <el-input v-model="submitData.inColor" size="medium"></el-input>
           </el-form-item>
           <el-form-item label="物品重量">
-            <el-input v-model="submitData.goodsWeight" size="medium"></el-input>
+            <el-input v-model="submitData.stuffWeight" size="medium"></el-input>
           </el-form-item>
         </div>
         <div>
           <div class="title">发现细节</div>
           <el-form-item label="发现时间">
             <el-date-picker
-              v-model="submitData.findTime"
+              v-model="submitData.discoverTime"
               type="datetime"
               placeholder="选择日期时间"
               default-time="12:00:00"
@@ -36,17 +36,17 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item label="发现环节">
-            <el-input v-model="submitData.findPart" size="medium"></el-input>
+            <el-input v-model="submitData.discoverLink" size="medium"></el-input>
           </el-form-item>
           <el-form-item label="发现人员">
-            <el-input v-model="submitData.findPerson" size="medium"></el-input>
+            <el-input v-model="submitData.discoverer" size="medium"></el-input>
           </el-form-item>
         </div>
         <div>
           <div class="title">登记细节</div>
           <el-form-item label="登记时间">
             <el-date-picker
-              v-model="submitData.recordTime"
+              v-model="submitData.registrationTime"
               type="datetime"
               placeholder="选择日期时间"
               default-time="12:00:00"
@@ -55,13 +55,13 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item label="登记单位">
-            <el-input v-model="submitData.recordHospital" size="medium"></el-input>
+            <el-input v-model="submitData.registrationUnit" size="medium"></el-input>
           </el-form-item>
           <el-form-item label="简登人员">
-            <el-input v-model="submitData.firstRecordPerson" size="medium"></el-input>
+            <el-input v-model="submitData.simpleRegistrant" size="medium"></el-input>
           </el-form-item>
           <el-form-item label="补登人员">
-            <el-input v-model="submitData.lastRecordPerson" size="medium"></el-input>
+            <el-input v-model="submitData.supRegistrant" size="medium"></el-input>
           </el-form-item>
           <el-form-item label="联系电话">
             <el-input v-model="submitData.phone" size="medium"></el-input>
@@ -70,19 +70,19 @@
         <div>
           <div class="title">其他信息</div>
           <el-form-item label="无面单编号">
-            <el-input v-model="submitData.noExpressSheet"  size="medium"></el-input>
+            <el-input v-model="submitData.picID"  size="medium"></el-input>
           </el-form-item>
           <el-form-item label="快件遗落类型">
-            <el-input v-model="submitData.goodsLoseType" size="medium"></el-input>
+            <el-input v-model="submitData.loseType" size="medium"></el-input>
           </el-form-item>
           <el-form-item label="进/出港">
-            <el-input v-model="submitData.port" size="medium"></el-input>
+            <el-input v-model="submitData.inout" size="medium"></el-input>
           </el-form-item>
           <el-form-item label="车辆运输号">
-            <el-input v-model="submitData.carID" size="medium"></el-input>
+            <el-input v-model="submitData.carId" size="medium"></el-input>
           </el-form-item>
           <el-form-item label="上一站编码">
-            <el-input v-model="submitData.previousCode" size="medium"></el-input>
+            <el-input v-model="submitData.preStation" size="medium"></el-input>
           </el-form-item>
         </div>
         <div>
@@ -108,35 +108,39 @@
 </template>
 
 <script>
-// import { addPictureAPI } from '@/api'
+import { updateDelivery } from '@/api'
 import { baseURL } from '@/utils/request'
 export default {
   data () {
     return {
       avatar: [],
       submitData: {
-        goodsType: '',
-        goodsName: '',
-        goodsNum: '',
-        goodsColor: '',
-        goodsWeight: '',
-        findTime: '',
-        findPart: '',
-        findPerson: '',
-        recordTime: '',
-        recordHospital: '',
-        firstRecordPerson: '',
-        lastRecordPerson: '',
+        picID: '',
+        discoverer: '',
         phone: '',
-        noExpressSheet: '',
-        goodsLoseType: '',
-        port: '',
-        carID: '',
-        previousCode: ''
+        stuffWeight: '',
+        inInfo: '',
+        discoverTime: '',
+        inout: '',
+        simpleRegistrant: '',
+        loseType: '',
+        inNum: '',
+        carId: '',
+        discoverLink: '',
+        registrationUnit: '',
+        supRegistrant: '',
+        stuffType: '',
+        inColor: '',
+        preStation: ''
       },
       images: [],
       baseURL
     }
+  },
+  mounted () {
+    console.log(this.$route.query.row)
+    this.submitData = { ...this.$route.query.row }
+    console.log(this.submitData)
   },
   methods: {
     handleChange (file, fileList) {
@@ -149,12 +153,9 @@ export default {
     },
     async submitFrom () {
       const formData = new FormData()
-      formData.append('avatar', this.avatar)
-      formData.append('brief', JSON.stringify(this.submitData))
-      formData.append('tags', '')
-      console.log(formData.get('avatar'))
-      // const res = await addPictureAPI(formData)
-      // console.log(res)
+      formData.append('cont_sign', this.$router.query.row.cont_sign)
+      const res = await updateDelivery(formData)
+      console.log(res)
     }
   }
 }

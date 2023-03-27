@@ -4,24 +4,37 @@
     <div slot="header" class="clearfix">
       <span style="font-size:18px">上传图片搜索相似图片</span>
     </div>
-    <div class="btn-box">
-      <el-upload
-        :action="baseURL"
-        multiple
-        :auto-upload='false'
-        accept="jpg,png,bmp"
-        list-type="picture-card"
-        :file-list='images'
-        :on-change="onFileChange"
-        :limit="1"
-        :on-exceed='limitNum'
-        >
-          <i class="el-icon-plus"></i>
-        </el-upload>
-        <br/>
-      <el-button type="success" icon="el-icon-upload" @click="updateAvatarFn"
-        >上传图片</el-button>
+    <div>
+      <el-row>
+        <el-col :span="8">
+          <div class="btn-box">
+            <el-upload
+              :action="baseURL"
+              multiple
+              :auto-upload='false'
+              accept="jpg,png,bmp"
+              list-type="picture-card"
+              :file-list='images'
+              :on-change="onFileChange"
+              :limit="1"
+              :on-exceed='limitNum'
+              >
+                <i class="el-icon-plus"></i>
+              </el-upload>
+              <br/>
+            <el-button type="success" icon="el-icon-upload" @click="updateAvatarFn"
+            >上传图片</el-button>
+          </div>
+        </el-col>
+        <el-col :span="16">
+          <div style="display:flex;">
+            <div style="width: 170px;line-height: 28px;">输入列表返回条数</div>
+            <el-input oninput="if(value>20)value=20;if(value<0)value=0" class='editNum' v-model.number="rn" size="mini" placeholder="不输入默认为10" type="number"></el-input>
+          </div>
+        </el-col>
+      </el-row>
     </div>
+
   </el-card>
   <el-card>
     <div slot="header" class="clearfix">
@@ -29,7 +42,7 @@
     <div style="float:right">没找到您想要的？可选择<el-button type="text" @click="goToEditExpress">新增丢失快件</el-button></div>
   </div>
   <el-table :data="tableData">
-    <el-table-column label="物品信息" width="300px">
+    <el-table-column label="物品信息" width="200px">
       <template slot-scope="scope">
         <div style="display:flex">
           <div>
@@ -69,12 +82,12 @@
       <template slot-scope="scope">
         <div>无面单编号：{{scope.row.picID}}</div>
         <div>快件遗落类型：{{scope.row.loseType}}</div>
-        <div>进/出港：{{scope.row.Inout}}</div>
+        <div>进/出港：{{scope.row.inout}}</div>
         <div>车辆运输号：{{scope.row.carId}}</div>
         <div>上一站编码：{{scope.row.preStation}}</div>
       </template>
     </el-table-column>
-    <el-table-column label="操作">
+    <el-table-column label="操作" width="100px">
       <template slot-scope="scope">
         <el-button type="text" @click="goToEdit(scope.row)">编辑</el-button>
         <el-button type="text" @click="openDelete(scope.row)">删除</el-button>
@@ -86,31 +99,49 @@
 </template>
 
 <script>
-import { searchPictureAPI } from '@/api'
+import { searchDelivery, deleteDelivery } from '@/api'
 import { baseURL } from '@/utils/request'
 export default {
   name: 'user-avatar',
   data () {
     return {
+      rn: 4,
       images: [],
       baseURL: baseURL,
       formData: {},
-      tableData: []
+      tableData: [{ preStation: '1' }]
     }
   },
   methods: {
     async updateAvatarFn () {
-      const { data: res } = await searchPictureAPI(this.formData)
-      console.log(res)
-      const tableData = []
-      for (let i = 0; i < res.data.length; i++) {
-        let obj = JSON.parse(res.data[i])
-        const address = baseURL + '/' + obj.picPath
-        obj = { ...obj, address }
-        console.log(obj)
-        tableData.push(obj)
+      const formData = this.formData
+      const rn = this.rn
+      if (formData.get('rn')) {
+        formData.delete('rn')
       }
-      this.tableData = tableData
+      if (rn !== '') {
+        formData.append('rn', rn)
+      } else {
+        formData.append('rn', 10)
+      }
+      const { data: res } = await searchDelivery(formData)
+      console.log(res)
+      if (res.code === '200') {
+        const tableData = []
+        for (let i = 0; i < res.data.length; i++) {
+          let obj = JSON.parse(res.data[i])
+          const address = baseURL + '/' + obj.picPath
+          obj = { ...obj.brief, address }
+          console.log(obj.brief)
+          tableData.push(obj)
+        }
+        this.tableData = tableData
+      } else {
+        this.$message({
+          type: 'warning',
+          message: res.msg
+        })
+      }
       // console.log(JSON.parse(res.data))
       // this.tableData = JSON.parse(res.data)
     },
@@ -126,7 +157,6 @@ export default {
         console.log(file.raw)
         const formData = new FormData()
         formData.append('avatar', file.raw)
-        formData.append('rn', 5)
         this.formData = formData
       }
     },
@@ -135,11 +165,21 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        })
+      }).then(async () => {
+        const formData = new FormData()
+        formData.append('cont_sign', row.cont_sign)
+        const { data: res } = await deleteDelivery(formData)
+        if (res.code === '200') {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        } else {
+          this.$message({
+            type: 'warning',
+            message: res.msg
+          })
+        }
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -148,7 +188,10 @@ export default {
       })
     },
     goToEdit (row) {
-      this.$router.push('/edit-express')
+      this.$router.push({
+        path: '/edit-express',
+        query: { row }
+      })
     },
     goToEditExpress () {
       this.$router.push('/addDelivery')
@@ -158,6 +201,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
+/deep/.editNum input::-webkit-outer-spin-button,
+/deep/.editNum input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+/deep/ .editNum input[type="number"] {
+    -moz-appearance: textfield;
+  }
 .btn-box {
   margin-top: 10px;
 }
