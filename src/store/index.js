@@ -11,7 +11,8 @@ export default new Vuex.Store({
     // 1. 编写变量
     token: '',
     isAdmin: '',
-    username: ''
+    username: '',
+    isLoading: true
   },
   getters: {},
   mutations: {

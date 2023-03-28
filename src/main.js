@@ -15,6 +15,11 @@ import 'quill/dist/quill.bubble.css'
 import '@/assets/global.less'
 
 import dayjs from 'dayjs'
+// 全局组件的引入    form 后面 标清 loading 路径 因为我的是放在components里面的
+import Loading from '@/components/Loading/loading.vue'
+// 全局组件的使用
+// eslint-disable-next-line vue/multi-word-component-names
+Vue.component('Loading', Loading)
 
 Vue.use(VueQuillEditor)
 

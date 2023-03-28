@@ -19,6 +19,7 @@ myAxios.interceptors.request.use(
   (config) => {
     // 被发出的请求都会前结果请求拦截器
     // 在请求拦截器前写同一添加请求头（token），不用一个个加
+    store.state.isLoading = true
     if (store.state.token) {
       config.headers.Authorization = store.state.token
     }
@@ -34,6 +35,7 @@ myAxios.interceptors.request.use(
 
 myAxios.interceptors.response.use(
   (response) => {
+    store.state.isLoading = false
     // 响应状态码为 2或3开头 时触发成功的回调，形参中的 response 是“成功的结果”
     // return到axios原地Promise对象,作为成功的结果
     return response
