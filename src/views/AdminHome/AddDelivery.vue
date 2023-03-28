@@ -35,7 +35,8 @@
             list-type="picture-card"
             :file-list='images'
             :on-change="handleChange"
-            :limit="8"
+            :limit="1"
+            :on-exceed="handleExceed"
             >
               <i class="el-icon-plus"></i>
             </el-upload>
@@ -273,14 +274,15 @@ export default {
       this.avatar = avatar
       // this.avatar = fileList[0].raw
     },
+    handleExceed () {
+      this.$message.warning('仅能选择一张图片用于上传')
+    },
     async onSubmit () {
       const formData = new FormData()
-      // console.log(this.avatar)
       formData.append('avatar', this.avatar[0])
       formData.append('brief', JSON.stringify(this.delivery))
       formData.append('tags', '')
       const { data: res } = await addDelivery(formData)
-      console.log(res)
       if (res.code === '200') {
         this.$message({
           type: 'success',
@@ -316,8 +318,7 @@ export default {
         })
       }
     }
-  },
-  created () {}
+  }
 }
 </script>
 

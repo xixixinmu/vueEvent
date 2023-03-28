@@ -140,20 +140,19 @@ export default {
   mounted () {
     console.log(this.$route.query.row)
     this.submitData = { ...this.$route.query.row }
-    console.log(this.submitData)
   },
   methods: {
     handleChange (file, fileList) {
       const avatar = []
       for (let i = 0; i < fileList.length; i++) {
         avatar.push(fileList[i].raw)
-        console.log(fileList[i].raw)
       }
       this.avatar = avatar
     },
     async submitFrom () {
       const formData = new FormData()
-      formData.append('cont_sign', this.$router.query.row.cont_sign)
+      console.log(this.submitData.cont_sign)
+      formData.append('cont_sign', this.submitData.cont_sign)
       const res = await updateDelivery(formData)
       console.log(res)
     }

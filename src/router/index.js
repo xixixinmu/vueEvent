@@ -31,15 +31,15 @@ const routes = [
       },
       {
         path: '/statistics',
-        component: () => import('@/components/AdminHome/Statistics.vue')
+        component: () => import('@/views/AdminHome/Statistics.vue')
       },
       {
         path: '/addDelivery',
-        component: () => import('@/components/AdminHome/AddDelivery.vue')
+        component: () => import('@/views/AdminHome/AddDelivery.vue')
       },
       {
         path: '/edit-express',
-        component: () => import('@/components/edit-express/editExpress')
+        component: () => import('@/views/edit-express/editExpress')
       }
     ]
   }

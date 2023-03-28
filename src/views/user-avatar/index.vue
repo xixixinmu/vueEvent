@@ -2,7 +2,7 @@
 <div>
     <el-card class="box-card">
     <div slot="header" class="clearfix">
-      <span style="font-size:18px">上传图片搜索相似图片</span>
+      <span style="font-size:18px">无面单货物查找</span>
     </div>
     <div>
       <el-row>
@@ -23,7 +23,7 @@
               </el-upload>
               <br/>
             <el-button type="success" icon="el-icon-upload" @click="updateAvatarFn"
-            >上传图片</el-button>
+            >开始查找</el-button>
           </div>
         </el-col>
         <el-col :span="16">
@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import { searchDelivery, deleteDelivery } from '@/api'
+import { searchDelivery, deleteDelivery, getAllDelivery } from '@/api'
 import { baseURL } from '@/utils/request'
 export default {
   name: 'user-avatar',
@@ -109,10 +109,33 @@ export default {
       images: [],
       baseURL: baseURL,
       formData: {},
-      tableData: [{ preStation: '1' }]
+      tableData: []
     }
   },
+  mounted () {
+    this.getAllProductInfo()
+  },
   methods: {
+    async getAllProductInfo () {
+      const { data: res } = await getAllDelivery()
+      if (res.code === '200') {
+        const tableData = []
+        for (let i = 0; i < res.data.length; i++) {
+          let obj = res.data[i]
+          const address = baseURL + '/' + obj.picPath
+          obj = { ...obj.brief, address, cont_sign: obj.cont_sign }
+          console.log(obj)
+          tableData.push(obj)
+        }
+        this.tableData = tableData
+      } else {
+        this.$message({
+          type: 'warning',
+          message: res.msg
+        })
+      }
+      console.log(res)
+    },
     async updateAvatarFn () {
       const formData = this.formData
       const rn = this.rn

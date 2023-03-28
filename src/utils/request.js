@@ -49,6 +49,8 @@ myAxios.interceptors.response.use(
       store.commit('updateUser', '')
       router.push('/login')
       Message.error('身份信息已过期，请重新登录')
+    } else {
+      Message.error('请求失败')
     }
     return Promise.reject(error)
   }

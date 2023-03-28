@@ -65,7 +65,6 @@ export default {
   data () {
     // 自定义规则函数也要写在data里 但不写return里
     const samePwdFn = (rule, value, callback) => {
-      // console.log(rule, value, callback);
       if (this.form.password !== value) {
         callback(new Error('两次输入密码不一致'))
       } else {
@@ -138,18 +137,15 @@ export default {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
           // 通过校验
-
           // 把axios返回的数据对象data中的值存在res里
-          const res = await registerAPI(this.form)
-          console.log(res)
-          // if (res.code !== 0) {
-          //   // code为0成功 1异常
-          //   return this.$message.error(res.message)
-          //   // $message为elementUI封装的弹窗
-          // } else {
-          //   this.$message.success(res.message)
-          //   this.$router.push('./login')
-          // }
+          const { data: res } = await registerAPI(this.form)
+          if (res.code !== '200') {
+            return this.$message.error(res.msg)
+            // $message为elementUI封装的弹窗
+          } else {
+            this.$message.success(res.data)
+            this.$router.push('./login')
+          }
         } else {
           return false
           // 阻止表单默认提交行为

@@ -2,7 +2,7 @@
   <el-container class="main-container">
     <!-- 头部区域 -->
     <el-header>
-      <div class="webTitle">昊目智能网站</div>
+      <div class="webTitle">无面单快递查找</div>
       <el-menu
         class="el-menu-top"
         mode="horizontal"
@@ -72,7 +72,7 @@
           <router-view></router-view>
         </el-main>
         <!-- 底部 footer 区域 -->
-        <el-footer>昊目智能网站</el-footer>
+        <el-footer>无面单快递查找</el-footer>
       </el-container>
     </el-container>
   </el-container>
