@@ -269,7 +269,6 @@ export default {
       const avatar = []
       for (let i = 0; i < fileList.length; i++) {
         avatar.push(fileList[i].raw)
-        console.log(fileList[i].raw)
       }
       this.avatar = avatar
       // this.avatar = fileList[0].raw

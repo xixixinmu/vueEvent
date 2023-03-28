@@ -61,11 +61,14 @@ export const searchDelivery = (formData) => {
   })
 }
 
-export const getAllDelivery = () => {
+export const getAllDelivery = (page) => {
   // 如果是一个普通对象，axios会把它转成JSON字符串在请求里体里交给后台
   // 这个接口文档要求请求体里是一个FormData类型(表单数据对象)携带文件给后台
   return request({
-    url: '/api/picInfo'
+    url: '/api/picInfo',
+    params: {
+      page
+    }
   })
 }
 
@@ -85,11 +88,14 @@ export const updateDelivery = (formData) => {
   })
 }
 
-export const getCateListAPI = () => {
+export const getCateListAPI = (page) => {
   // 获取文章分类API
   return request({
     url: '/my/cate/list',
-    method: 'GET'
+    method: 'GET',
+    params: {
+      page
+    }
   })
 }
 

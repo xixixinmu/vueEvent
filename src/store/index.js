@@ -12,7 +12,7 @@ export default new Vuex.Store({
     token: '',
     isAdmin: '',
     username: '',
-    isLoading: true
+    isLoading: false
   },
   getters: {},
   mutations: {

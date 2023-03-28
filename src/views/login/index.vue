@@ -97,7 +97,6 @@ export default {
         if (valid) {
           // 把axios返回的数据对象data中的值存在res里
           const { data: res } = await loginAPI(this.form)
-          console.log(res)
           if (res.code !== 0) {
             // code为0成功 1异常
             return this.$message.error('用户名或密码错误')

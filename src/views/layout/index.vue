@@ -132,7 +132,6 @@ export default {
     },
     setMenuListFn () {
       const isAdmin = JSON.parse(localStorage.getItem('vuex')).isAdmin
-      // console.log()
       if (isAdmin === 1) {
         this.menus = [
           {

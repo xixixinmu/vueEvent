@@ -5,34 +5,24 @@
       <span style="font-size:18px">无面单货物查找</span>
     </div>
     <div>
-      <el-row>
-        <el-col :span="8">
-          <div class="btn-box">
-            <el-upload
-              :action="baseURL"
-              multiple
-              :auto-upload='false'
-              accept="jpg,png,bmp"
-              list-type="picture-card"
-              :file-list='images'
-              :on-change="onFileChange"
-              :limit="1"
-              :on-exceed='limitNum'
-              >
-                <i class="el-icon-plus"></i>
-              </el-upload>
-              <br/>
-            <el-button type="success" icon="el-icon-upload" @click="updateAvatarFn"
-            >开始查找</el-button>
-          </div>
-        </el-col>
-        <el-col :span="16">
-          <div style="display:flex;">
-            <div style="width: 170px;line-height: 28px;">输入列表返回条数</div>
-            <el-input oninput="if(value>20)value=20;if(value<0)value=0" class='editNum' v-model.number="rn" size="mini" placeholder="不输入默认为10" type="number"></el-input>
-          </div>
-        </el-col>
-      </el-row>
+      <div class="btn-box">
+        <el-upload
+          :action="baseURL"
+          multiple
+          :auto-upload='false'
+          accept="jpg,png,bmp"
+          list-type="picture-card"
+          :file-list='images'
+          :on-change="onFileChange"
+          :limit="1"
+          :on-exceed='limitNum'
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <br/>
+        <el-button type="success" icon="el-icon-upload" @click="updateAvatarFn"
+        >开始查找</el-button>
+      </div>
     </div>
 
   </el-card>
@@ -46,7 +36,7 @@
       <template slot-scope="scope">
         <div style="display:flex">
           <div>
-            <el-image style="width: 100%; height: 100px" :src="scope.row.address?scope.row.address:''" :preview-src-list="scope.row.srcList?scope.row.srcList:[]" :key="scope.row.id">
+            <el-image style="width: 100px; height: 100px" :src="scope.row.address?scope.row.address:''" :preview-src-list="[scope.row.address]?[scope.row.address]:[]" :key="scope.row.id">
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline"></i>
             </div>
@@ -94,6 +84,13 @@
       </template>
     </el-table-column>
   </el-table>
+   <el-pagination
+   v-show="showPagination"
+    background
+    layout="->,prev, pager, next"
+     @current-change="handleCurrentChange"
+    :total="43">
+  </el-pagination>
   </el-card>
 </div>
 </template>
@@ -105,26 +102,26 @@ export default {
   name: 'user-avatar',
   data () {
     return {
-      rn: 4,
       images: [],
       baseURL: baseURL,
       formData: {},
-      tableData: []
+      tableData: [],
+      showPagination: true
     }
   },
   mounted () {
     this.getAllProductInfo()
   },
   methods: {
-    async getAllProductInfo () {
-      const { data: res } = await getAllDelivery()
+    async getAllProductInfo (page = 1) {
+      this.showPagination = true
+      const { data: res } = await getAllDelivery(page)
       if (res.code === '200') {
         const tableData = []
         for (let i = 0; i < res.data.length; i++) {
           let obj = res.data[i]
           const address = baseURL + '/' + obj.picPath
           obj = { ...obj.brief, address, cont_sign: obj.cont_sign }
-          console.log(obj)
           tableData.push(obj)
         }
         this.tableData = tableData
@@ -134,28 +131,16 @@ export default {
           message: res.msg
         })
       }
-      console.log(res)
     },
     async updateAvatarFn () {
-      const formData = this.formData
-      const rn = this.rn
-      if (formData.get('rn')) {
-        formData.delete('rn')
-      }
-      if (rn !== '') {
-        formData.append('rn', rn)
-      } else {
-        formData.append('rn', 10)
-      }
-      const { data: res } = await searchDelivery(formData)
-      console.log(res)
+      this.showPagination = false
+      const { data: res } = await searchDelivery(this.formData)
       if (res.code === '200') {
         const tableData = []
         for (let i = 0; i < res.data.length; i++) {
           let obj = JSON.parse(res.data[i])
           const address = baseURL + '/' + obj.picPath
-          obj = { ...obj.brief, address }
-          console.log(obj.brief)
+          obj = { ...obj.brief, address, cont_sign: obj.cont_sign }
           tableData.push(obj)
         }
         this.tableData = tableData
@@ -165,8 +150,9 @@ export default {
           message: res.msg
         })
       }
-      // console.log(JSON.parse(res.data))
-      // this.tableData = JSON.parse(res.data)
+    },
+    handleCurrentChange (page) {
+      this.getAllProductInfo(page)
     },
     limitNum () {
       // alert('只能搜索一张图片')
@@ -177,9 +163,9 @@ export default {
       if (file.length === 0) {
         // 证明用户没有选择任何文件 然后点击了确定关闭选择弹窗
       } else {
-        console.log(file.raw)
         const formData = new FormData()
         formData.append('avatar', file.raw)
+        formData.append('rn', 10)
         this.formData = formData
       }
     },
@@ -197,6 +183,7 @@ export default {
             type: 'success',
             message: '删除成功!'
           })
+          this.getAllProductInfo()
         } else {
           this.$message({
             type: 'warning',
