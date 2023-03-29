@@ -18,7 +18,9 @@
             <el-input v-model="delivery.stuffType"></el-input>
           </el-form-item>
           <el-form-item label="物品重量" prop="stuffWeight">
-            <el-input v-model="delivery.stuffWeight"></el-input>
+            <el-input v-model="delivery.stuffWeight">
+              <template slot="append"><span style="color:black">kg</span></template>
+            </el-input>
           </el-form-item>
           <el-form-item label="内件颜色" prop="inColor">
             <el-input v-model="delivery.inColor"></el-input>
