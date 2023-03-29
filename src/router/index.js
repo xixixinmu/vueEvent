@@ -46,6 +46,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
+  mode: 'hash',
+  base: process.env.BASE_URL,
   routes
 })
 
@@ -59,11 +61,6 @@ router.beforeEach((to, from, next) => {
   const token = store.state.token
   if (token) {
     // 如果有token, 证明已登录
-    if (!store.state.userInfo.username) {
-      // 有token但是没有用户信息, 才去请求用户信息保存到vuex里
-      // 调用actions里方法请求数据
-      // 下次切换页面vuex里有用户信息数据就不会重复请求用户信息
-    }
     next() // 路由放行
   } else {
     // 如果无token

@@ -61,6 +61,8 @@ module.exports = defineConfig({
   // 如果你敲击yarn build , process.env.NODE_ENV的值就是'production'字符串
 
   publicPath: process.env.NODE_ENV === 'production' ? './' : '/', // 这句话是下面总结一要加的，其他比初始多的代码是总结二
+  assetsDir: 'static',
+  outputDir: 'dist',
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
