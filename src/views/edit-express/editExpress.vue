@@ -102,6 +102,7 @@
       </el-form>
       <br/>
       <el-button @click="submitFrom" type="primary">保存</el-button>
+      <el-button @click="goBack">取消</el-button>
     </el-card>
   </div>
 </template>
@@ -182,6 +183,9 @@ export default {
           message: res.msg
         })
       }
+    },
+    goBack () {
+      this.$router.push('/user-avatar')
     }
   }
 }
