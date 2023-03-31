@@ -83,7 +83,7 @@
     </el-table-column>
     <el-table-column label="其他信息">
       <template slot-scope="scope">
-        <div>无面单编号：{{scope.row.pidID}}</div>
+        <div>无面单编号：{{scope.row.picID}}</div>
         <div>快件遗落类型：{{scope.row.loseType}}</div>
         <div>进/出港：{{scope.row.inout}}</div>
         <div>车辆运输号：{{scope.row.carId}}</div>
