@@ -3,26 +3,39 @@
     <el-card class="box-card">
     <div slot="header" class="clearfix">
       <span style="font-size:18px">无面单货物查找</span>
+      <span style="margin-left: 10px;color: darkslategray;">可选择上传图片或使用无面单编号搜索</span>
     </div>
     <div>
-      <div class="btn-box">
-        <el-upload
-          :action="baseURL"
-          multiple
-          :auto-upload='false'
-          accept="jpg,png,bmp"
-          list-type="picture-card"
-          :file-list='images'
-          :on-change="onFileChange"
-          :limit="1"
-          :on-exceed='limitNum'
-          >
-            <i class="el-icon-plus"></i>
-          </el-upload>
-          <br/>
-        <el-button type="success" icon="el-icon-upload" @click="updateAvatarFn"
-        >开始查找</el-button>
-      </div>
+      <el-row>
+        <el-col :span="9">
+          <div class="btn-box">
+            <el-upload
+              :action="baseURL"
+              multiple
+              :auto-upload='false'
+              accept="jpg,png,bmp"
+              list-type="picture-card"
+              :file-list='images'
+              :on-change="onFileChange"
+              :limit="1"
+              :on-exceed='limitNum'
+              >
+                <i class="el-icon-plus"></i>
+            </el-upload>
+            <br/>
+            <el-button type="success" icon="el-icon-upload" @click="updateAvatarFn"
+            >开始查找</el-button>
+          </div>
+        </el-col>
+        <el-col :span="15">
+          <el-form label-width="100px" inline>
+            <el-form-item label="无面单编号">
+              <el-input v-model.trim="inquireData.picID" size="medium"></el-input>
+            </el-form-item>
+            <el-button @click="getAllProductInfo" style="margin-left: 10px;">查询</el-button>
+          </el-form>
+        </el-col>
+      </el-row>
     </div>
 
   </el-card>
@@ -70,7 +83,7 @@
     </el-table-column>
     <el-table-column label="其他信息">
       <template slot-scope="scope">
-        <div>无面单编号：{{scope.row.picID}}</div>
+        <div>无面单编号：{{scope.row.pidID}}</div>
         <div>快件遗落类型：{{scope.row.loseType}}</div>
         <div>进/出港：{{scope.row.inout}}</div>
         <div>车辆运输号：{{scope.row.carId}}</div>
@@ -89,7 +102,7 @@
     background
     layout="->,prev, pager, next"
      @current-change="handleCurrentChange"
-    :total="43">
+    :total="count">
   </el-pagination>
   </el-card>
 </div>
@@ -106,24 +119,30 @@ export default {
       baseURL: baseURL,
       formData: {},
       tableData: [],
-      showPagination: true
+      showPagination: true,
+      count: 0,
+      inquireData: {
+        picID: '',
+        page: 1
+      }
     }
   },
   mounted () {
     this.getAllProductInfo()
   },
   methods: {
-    async getAllProductInfo (page = 1) {
+    async getAllProductInfo () {
       this.showPagination = true
-      const { data: res } = await getAllDelivery(page)
+      const { data: res } = await getAllDelivery(this.inquireData)
       if (res.code === '200') {
         const tableData = []
-        for (let i = 0; i < res.data.length; i++) {
-          let obj = res.data[i]
+        for (let i = 0; i < res.data.briefList.length; i++) {
+          let obj = res.data.briefList[i]
           const address = baseURL + '/' + obj.picPath
-          obj = { ...obj.brief, address, cont_sign: obj.cont_sign }
+          obj = { ...obj, address }
           tableData.push(obj)
         }
+        this.count = res.data.count
         this.tableData = tableData
       } else {
         this.$message({
@@ -152,7 +171,8 @@ export default {
       }
     },
     handleCurrentChange (page) {
-      this.getAllProductInfo(page)
+      this.inquireData.page = page
+      this.getAllProductInfo()
     },
     limitNum () {
       // alert('只能搜索一张图片')

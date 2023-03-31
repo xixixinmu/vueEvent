@@ -94,8 +94,7 @@
           accept="jpg,png,bmp"
           list-type="picture-card"
           :file-list='images'
-          :on-change="handleChange"
-          :limit="8"
+          disabled
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -108,12 +107,11 @@
 </template>
 
 <script>
-import { updateDelivery } from '@/api'
+import { updateDelivery, getDeliveryInfo } from '@/api'
 import { baseURL } from '@/utils/request'
 export default {
   data () {
     return {
-      avatar: [],
       submitData: {
         picID: '',
         discoverer: '',
@@ -134,27 +132,56 @@ export default {
         preStation: ''
       },
       images: [],
-      baseURL
+      baseURL,
+      cont_sign: ''
     }
   },
+  created () {
+    if (!sessionStorage.getItem('cont_sign')) {
+      sessionStorage.setItem('cont_sign', this.$route.query.row.cont_sign)
+    }
+    this.cont_sign = sessionStorage.getItem('cont_sign')
+  },
   mounted () {
-    console.log(this.$route.query.row)
-    this.submitData = { ...this.$route.query.row }
+    this.getInfo()
+  },
+  beforeDestroy () {
+    sessionStorage.removeItem('cont_sign')
   },
   methods: {
-    handleChange (file, fileList) {
-      const avatar = []
-      for (let i = 0; i < fileList.length; i++) {
-        avatar.push(fileList[i].raw)
+    async getInfo () {
+      const { data: res } = await getDeliveryInfo(this.cont_sign)
+      if (res.code === '200') {
+        this.submitData = res.data
+        const address = baseURL + '/' + res.data.picPath
+        const images = []
+        images.push({ url: address })
+        this.images = images
+      } else {
+        this.$message({
+          type: 'warning',
+          message: res.msg
+        })
       }
-      this.avatar = avatar
     },
     async submitFrom () {
       const formData = new FormData()
-      console.log(this.submitData.cont_sign)
-      formData.append('cont_sign', this.submitData.cont_sign)
-      const res = await updateDelivery(formData)
-      console.log(res)
+      formData.append('cont_sign', this.cont_sign)
+      formData.append('brief', JSON.stringify(this.submitData))
+      formData.append('tags', '')
+      const { data: res } = await updateDelivery(formData)
+      if (res.code === '200') {
+        this.$message({
+          type: 'success',
+          message: res.msg
+        })
+        this.$router.push('/user-avatar')
+      } else {
+        this.$message({
+          type: 'warning',
+          message: res.msg
+        })
+      }
     }
   }
 }

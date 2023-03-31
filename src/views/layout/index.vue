@@ -33,8 +33,6 @@
         <el-menu
           :default-active="$route.path"
           class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
           background-color="#23262E"
           text-color="#fff"
           active-text-color="#409EFF"
@@ -123,12 +121,6 @@ export default {
             message: '取消退出登录'
           })
         })
-    },
-    handleOpen (key, keyPath) {
-      console.log(key, keyPath)
-    },
-    handleClose (key, keyPath) {
-      console.log(key, keyPath)
     },
     setMenuListFn () {
       const isAdmin = JSON.parse(localStorage.getItem('vuex')).isAdmin
