@@ -9,19 +9,17 @@
         style="width: 100%"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" align="center">
+        <el-table-column type="selection" align="center"></el-table-column>
+        <el-table-column label="用户名" align="center" prop="username"></el-table-column>
+        <el-table-column label="手机号" align="center" prop="phone"></el-table-column>
+        <el-table-column label="入库次数" align="center">
+          <template slot-scope="scope">{{ scope.row.addTimes }}</template>
         </el-table-column>
-        <el-table-column label="编号" width="70" align="center">
-          <template slot-scope="scope">{{ scope.row.id }}</template>
+        <el-table-column label="搜索次数" align="center">
+          <template slot-scope="scope">{{ scope.row.searchTimes }}</template>
         </el-table-column>
-        <el-table-column label="用户名" align="center">
-          <template slot-scope="scope">{{ scope.row.username }}</template>
-        </el-table-column>
-        <el-table-column label="入库记录数" width="170" align="center">
-          <template slot-scope="scope">{{ scope.row.recordNumber }}</template>
-        </el-table-column>
-        <el-table-column label="搜索次数" width="170" align="center">
-          <template slot-scope="scope">{{ scope.row.searchNumber }}</template>
+        <el-table-column label="修改次数" align="center">
+          <template slot-scope="scope">{{ scope.row.updateTimes }}</template>
         </el-table-column>
         <el-table-column
           prop="account"
@@ -29,20 +27,17 @@
           width="190"
           align="center"
         >
-          <template slot-scope="scope">{{ scope.row.deleteNumber }}</template>
+          <template slot-scope="scope">{{ scope.row.deleteTimes }}</template>
         </el-table-column>
       </el-table>
     </div>
     <div style="margin-top: 20px; width: 100%">
       <div class="block" style="float: right; padding: 0px 0px 10px">
         <el-pagination
-          @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
-          :page-sizes="[5, 10, 20, 50]"
-          :page-size="page_size"
           background
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="total, prev, pager, next, jumper"
           :total="total"
         >
         </el-pagination>
@@ -61,32 +56,39 @@ export default {
       loading: true,
       tableData: [],
       currentPage: 1,
-      page_size: 5,
       total: null
     }
+  },
+  mounted () {
+    this.handleCurrentChange()
   },
   methods: {
     // 处理选项框的操作，获取表格中哪些选项被选中
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
-    // 分页函数
-    handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
-      this.page_size = val
-      this.getList(1, this.page_size)
-    },
-    handleCurrentChange (val) {
+    handleCurrentChange (val = 1) {
       console.log(`当前页: ${val}`)
       this.currentPage = val
-      console.log(this.currentPage + ':' + this.page_size)
-      this.getList(this.currentPage, this.page_size)
+      console.log(this.currentPage)
+      this.getList(this.currentPage)
     },
     // 得到统计列表
-    async getList (page, pageSize) {
-      const { data: res } = await statisticsAPI(page, pageSize)
-      console.log(res)
-      this.tableData = JSON.parse(res.data)
+    async getList (page) {
+      const formData = new FormData()
+      formData.append('page', page)
+      const { data: res } = await statisticsAPI(formData)
+      if (res.code === '200') {
+        console.log(res.data)
+        this.total = res.data.count
+        this.tableData = res.data.briefList
+      } else {
+        this.$message({
+          type: 'warning',
+          message: res.msg
+        })
+      }
+      // this.tableData = JSON.parse(res.data)
     }
   }
 }

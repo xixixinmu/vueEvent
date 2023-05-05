@@ -55,6 +55,7 @@
           <el-form-item label="发现时间" prop="discoverTime">
             <el-col :span="12">
               <el-date-picker
+              placement="bottom-start"
                 v-model="delivery.discoverTime"
                 type="datetime"
                 placeholder="选择日期时间"

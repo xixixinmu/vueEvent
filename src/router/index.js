@@ -5,7 +5,7 @@ import store from '@/store/index'
 
 Vue.use(VueRouter)
 
-const whiteList = ['/login', '/register']
+const whiteList = ['/login', '/register', '/findPassword']
 
 const routes = [
   {
@@ -19,6 +19,10 @@ const routes = [
   {
     path: '/login',
     component: () => import('@/views/login')
+  },
+  {
+    path: '/findPassword',
+    component: () => import('@/views/findPassword')
   },
   {
     path: '/layout',
@@ -40,6 +44,18 @@ const routes = [
       {
         path: '/edit-express',
         component: () => import('@/views/edit-express/editExpress')
+      },
+      {
+        path: '/payPage',
+        component: () => import('@/components/Payment/qrcode')
+      },
+      {
+        path: '/personalCenter',
+        component: () => import('@/views/AdminHome/personalCenter')
+      },
+      {
+        path: '/batchImport',
+        component: () => import('@/views/batchImport')
       }
     ]
   }

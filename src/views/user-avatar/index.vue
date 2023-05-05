@@ -30,7 +30,7 @@
         <el-col :span="15">
           <el-form label-width="100px" inline>
             <el-form-item label="无面单编号">
-              <el-input v-model.trim="inquireData.picID" size="medium"></el-input>
+              <el-input v-model.trim="inquireData.picID" ></el-input>
             </el-form-item>
             <el-button @click="getAllProductInfo" style="margin-left: 10px;">查询</el-button>
           </el-form>
@@ -44,7 +44,37 @@
     <span style="font-size:18px">快件信息</span>
     <div style="float:right">没找到您想要的？可选择<el-button type="text" @click="goToEditExpress">新增丢失快件</el-button></div>
   </div>
-  <el-table :data="tableData">
+  <div class="messageCardBox">
+    <el-card v-for="(item,index) in tableData" :key="index" class="cardSize">
+      <div>
+        <el-image style="width: 100px; height: 100px" :src="item.address?item.address:''" :preview-src-list="[item.address]?[item.address]:[]"></el-image>
+        <div>
+          <div>物品分类：{{item.stuffType}}</div>
+          <div>物品名称：{{item.inInfo}}</div>
+          <div>物品数量：{{item.inNum}}</div>
+          <div>物品颜色：{{item.inColor}}</div>
+          <div>物品重量：{{item.stuffWeight}}</div>
+          <el-button type="text" @click="openDialog(item)">查看详细信息</el-button>
+          <div>
+            <el-button type="text" @click="goToEdit(item)">编辑</el-button>
+            <el-button type="text" @click="openDelete(item)">删除</el-button>
+          </div>
+        </div>
+      </div>
+    </el-card>
+    <br/>
+  </div>
+  <el-dialog :visible.sync="dialogVisible">
+    <div>
+      <div class="title">物品细节</div>
+        物品分类:<span>{{detailData.stuffType}}</span>
+        物品名称:<span>{{detailData.inInfo}}</span>
+        物品数量:<span>{{detailData.inNum}}</span>
+        物品颜色:<span>{{detailData.inColor}}</span>
+        物品重量:<span>{{detailData.stuffWeight}}</span>
+    </div>
+  </el-dialog>
+  <!-- <el-table :data="tableData">
     <el-table-column label="物品信息" width="200px">
       <template slot-scope="scope">
         <div style="display:flex">
@@ -96,7 +126,7 @@
         <el-button type="text" @click="openDelete(scope.row)">删除</el-button>
       </template>
     </el-table-column>
-  </el-table>
+  </el-table> -->
    <el-pagination
    v-show="showPagination"
     background
@@ -117,14 +147,17 @@ export default {
     return {
       images: [],
       baseURL: baseURL,
+      dialogVisible: false,
       formData: {},
+      dialogData: {},
       tableData: [],
       showPagination: true,
       count: 0,
       inquireData: {
         picID: '',
         page: 1
-      }
+      },
+      detailData: {}
     }
   },
   mounted () {
@@ -175,7 +208,6 @@ export default {
       this.getAllProductInfo()
     },
     limitNum () {
-      // alert('只能搜索一张图片')
       this.$message.error('只能上传一张图片用于搜索')
     },
     onFileChange (file) {
@@ -190,7 +222,7 @@ export default {
       }
     },
     openDelete (row) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该快件信息, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -215,6 +247,20 @@ export default {
           type: 'info',
           message: '已取消删除'
         })
+      })
+    },
+    openDialog (item) {
+      this.$confirm('查看详细信息将会扣除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 点击确定后发送请求检查余额  如果成功扣费则打开快件详细信息 并且给编辑和删除权限
+        this.detailData = item
+        console.log(item)
+        this.dialogVisible = true
+      }).then(() => {
+
       })
     },
     goToEdit (row) {
@@ -243,5 +289,22 @@ export default {
 }
 .preview {
   object-fit: cover;
+}
+.messageCardBox{
+  display:flex;
+  flex-wrap: wrap;
+  .cardSize{
+    width:170px;
+    // height:250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right:10px;
+    margin-bottom:10px;
+  }
+}
+.title{
+  font-size: 16px;
+  line-height: 40px;
 }
 </style>

@@ -195,6 +195,5 @@ export default {
 .title{
   font-size: 16px;
   line-height: 40px;
-
 }
 </style>

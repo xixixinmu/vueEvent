@@ -32,14 +32,11 @@ export const loginAPI = ({ username, password }) => {
   })
 }
 
-export const statisticsAPI = (page, pageSize) => {
+export const statisticsAPI = (formData) => {
   return request({
     url: '/api/statistics',
     method: 'POST',
-    data: {
-      page,
-      pageSize
-    }
+    data: formData
   })
 }
 
@@ -91,6 +88,16 @@ export const getDeliveryInfo = (cont_sign) => {
   })
 }
 
+export const getUserInfo = () => {
+  return request({
+    url: '/api/userInfo',
+    method: 'GET'
+    // params: {
+    //   cont_sign: cont_sign
+    // }
+  })
+}
+
 export const updateDelivery = (formData) => {
   return request({
     url: '/api/update',
@@ -99,112 +106,10 @@ export const updateDelivery = (formData) => {
   })
 }
 
-export const getCateListAPI = (page) => {
-  // 获取文章分类API
+export const sendVerifiCode = (phone) => {
   return request({
-    url: '/my/cate/list',
-    method: 'GET',
-    params: {
-      page
-    }
-  })
-}
-
-export const createCateListAPI = ({ cate_name, cate_alias }) => {
-  return request({
-    url: '/my/cate/add',
+    url: '/api/getBack',
     method: 'POST',
-    data: {
-      cate_name,
-      cate_alias
-    }
-  })
-}
-
-export const getCateAPI = (id) => {
-  return request({
-    url: '/my/cate/info',
-    params: {
-      id
-    }
-  })
-}
-
-export const changeCateAPI = ({ id, cate_name, cate_alias }) => {
-  return request({
-    url: '/my/cate/info',
-    method: 'PUT',
-    data: {
-      id,
-      cate_name,
-      cate_alias
-    }
-  })
-}
-
-/**
- * 删除-文章分类
- * @param {*} id 要删除的-文章分类id
- * @returns Promise对象
- */
-export const delArtCateAPI = (id) => {
-  return request({
-    url: '/my/cate/del',
-    method: 'DELETE',
-    params: {
-      id
-    }
-  })
-}
-
-export const addArticleAPI = (fd) => {
-  // 如果是一个普通对象，axios会把它转成JSON字符串在请求里体里交给后台
-  // 这个接口文档要求请求体里是一个FormData类型(表单数据对象)携带文件给后台
-
-  return request({
-    url: '/my/article/add',
-    method: 'POST',
-    data: fd
-  })
-}
-
-/**
- * 获取文章列表
- * @param {*} param0 { pagenum: 当前页码数, pagesize: 当前页条数, cate_id: 文章分类id, state: 文章状态 }
- * @returns Promise对象
- */
-export const getArticleListAPI = ({ pagenum, pagesize, cate_id, state }) => {
-  return request({
-    url: '/my/article/list',
-    params: {
-      pagenum,
-      pagesize,
-      cate_id,
-      state
-    }
-  })
-}
-
-/**
- * 获取-文章详情
- * @param {*} id 文章id
- * @returns Promise对象
- */
-export const getArticleDetailAPI = (id) => {
-  return request({
-    url: '/my/article/info',
-    params: {
-      id
-    }
-  })
-}
-
-export const deleteArticleAPI = (id) => {
-  return request({
-    url: '/my/article/info',
-    method: 'DELETE',
-    params: {
-      id
-    }
+    data: phone
   })
 }

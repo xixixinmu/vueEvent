@@ -127,22 +127,45 @@ export default {
       if (isAdmin === 1) {
         this.menus = [
           {
-            icon: 'el-icon-s-cooperation',
-            indexPath: '/addDelivery',
-            title: '添加快件'
+            icon: 'el-icon-folder-add',
+            title: '添加快件',
+            indexPath: '1',
+            children: [{
+              icon: 'el-icon-edit',
+              indexPath: '/addDelivery',
+              title: '单个添加'
+            }, {
+              icon: 'el-icon-menu',
+              indexPath: '/batchImport',
+              title: '批量添加'
+            }]
           },
           {
             icon: 'el-icon-s-cooperation',
             indexPath: '/user-avatar',
             title: '管理快件'
+          },
+          {
+            icon: 'el-icon-user',
+            indexPath: '/personalCenter',
+            title: '个人中心'
           }
         ]
       } else {
         this.menus = [
           {
-            icon: 'el-icon-s-cooperation',
-            indexPath: '/addDelivery',
-            title: '添加快件'
+            icon: 'el-icon-folder-add',
+            title: '添加快件',
+            indexPath: '1',
+            children: [{
+              icon: 'el-icon-edit',
+              indexPath: '/addDelivery',
+              title: '单个添加'
+            }, {
+              icon: 'el-icon-menu',
+              indexPath: '/batchImport',
+              title: '批量添加'
+            }]
           },
           {
             icon: 'el-icon-s-cooperation',

@@ -25,7 +25,10 @@
           </el-form-item>
         <el-form-item>
           <el-button type="primary" style="width: 100%" @click="loginFn">登录</el-button>
-          <el-link type="info" @click="goRegister">去注册</el-link>
+          <div style="display: flex;justify-content: space-between;">
+            <el-link type="info" @click="goRegister">去注册</el-link>
+            <el-link type="info" @click="goFindPassword">忘记密码</el-link>
+          </div>
         </el-form-item>
       </el-form>
     </div>
@@ -117,6 +120,9 @@ export default {
     },
     goRegister () {
       this.$router.push('./register')
+    },
+    goFindPassword () {
+      this.$router.push('./findPassword')
     },
     changeCode (value) {
       this.checkCode = value
