@@ -5,7 +5,7 @@ import store from '@/store/index'
 
 Vue.use(VueRouter)
 
-const whiteList = ['/login', '/register', '/findPassword']
+const whiteList = ['/login', '/register', '/findPassword', '/resetPassword']
 
 const routes = [
   {
@@ -23,6 +23,10 @@ const routes = [
   {
     path: '/findPassword',
     component: () => import('@/views/findPassword')
+  },
+  {
+    path: '/resetPassword',
+    component: () => import('@/views/resetPassword')
   },
   {
     path: '/layout',

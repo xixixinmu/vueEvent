@@ -113,3 +113,19 @@ export const sendVerifiCode = (phone) => {
     data: phone
   })
 }
+
+export const receiveVerifiCode = (code) => {
+  return request({
+    url: '/api/validate',
+    method: 'POST',
+    data: code
+  })
+}
+
+export const changePassword = (password) => {
+  return request({
+    url: '/api/chgPassword',
+    method: 'POST',
+    data: password
+  })
+}

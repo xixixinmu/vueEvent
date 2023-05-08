@@ -9,55 +9,30 @@
             v-model="form.phone"
           ></el-input>
         </el-form-item>
-        <!-- <el-form-item prop="password" label="密码">
-          <el-input
-            placeholder="请输入密码"
-            type="password"
-            v-model="form.password"
-            show-password
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="repassword" label="确认密码">
-          <el-input
-            type="password"
-            placeholder="请确认密码"
-            v-model="form.repassword"
-            show-password
-          ></el-input>
-        </el-form-item> -->
         <el-form-item prop="inputVal" label="验证码">
-            <div class="validateCode">
-              <el-input v-model="form.inputVal" style="width:250px" clearable placeholder="请输入验证码"></el-input>
-              <el-button @click="sendVerificationCode">发送验证码</el-button>
+            <div style="display:flex">
+              <el-input class='verifiInput' v-model="form.inputVal" clearable placeholder="请输入验证码"></el-input>
+              <el-button v-if="dydShow" class="verifiButton" @click="sendVerificationCode" type="primary">发送验证码</el-button>
+              <el-button v-if="!dydShow" class="verifiButton" :disabled='true' type="primary">{{codeTimer}}s</el-button>
             </div>
         </el-form-item>
       </el-form>
       <el-button type="primary" style="width: 100%" @click="registerFn"
-        >修改密码</el-button>
+        >确定</el-button>
       <el-link type="info" @click="goLogin" style="margin-bottom:20px;margin-top:10px">去登录</el-link>
     </div>
   </div>
 </template>
 
 <script>
-import { registerAPI, sendVerifiCode } from '@/api/index'
+import { receiveVerifiCode, sendVerifiCode } from '@/api/index'
 
 export default {
   name: 'RegisterPage',
   data () {
-    // 自定义规则函数也要写在data里 但不写return里
-    const samePwdFn = (rule, value, callback) => {
-      if (this.form.password !== value) {
-        callback(new Error('两次输入密码不一致'))
-      } else {
-        callback()
-      }
-    }
     return {
       form: {
         phone: '',
-        password: '',
-        repassword: '',
         inputVal: ''
       },
       rules: {
@@ -70,41 +45,33 @@ export default {
             trigger: 'blur'
           }
         ],
-        // pattern属于正则匹配要输入的东西
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          {
-            pattern: /^[\S]{5,15}$/,
-            //  \S为匹配非空格字符  \s为匹配空白字符
-            message: '密码为5-15位的非空格字符',
-            trigger: 'blur'
-          }
-        ],
-        repassword: [
-          { required: true, message: '请再次输入密码', trigger: 'blur' },
-          { validator: samePwdFn, trigger: 'blur' }
-        ],
         inputVal: [
           { required: true, message: '验证码不能为空', trigger: 'blur' }
         ]
-      }
+      },
+      countdownTimer: '',
+      codeTimer: '',
+      dydShow: true
     }
   },
   methods: {
     // 注册
     registerFn () {
       // js兜底校验  判断输入是否通过前端校验
-      this.$refs.form.validate(async (valid) => {
+      this.$refs.form.validate(async (valid, a, b) => {
         if (valid) {
           // 通过校验
           // 把axios返回的数据对象data中的值存在res里
-          const { data: res } = await registerAPI(this.form)
+          const formData = new FormData()
+          formData.append('code', this.form.inputVal)
+          const { data: res } = await receiveVerifiCode(formData)
+          console.log(res)
           if (res.code !== '200') {
             return this.$message.error(res.msg)
             // $message为elementUI封装的弹窗
           } else {
-            this.$message.success(res.data)
-            this.$router.push('./login')
+            this.$message.success(res.msg)
+            this.$router.push('./resetPassword')
           }
         } else {
           return false
@@ -125,6 +92,22 @@ export default {
       } else {
         this.$message.success(res.msg)
       }
+      if (!this.countdownTimer) {
+        // 倒计时间
+        this.codeTimer = 60
+        // 判断时间是不是要显示
+        this.dydShow = false
+        // 设置倒计时定时器
+        this.countdownTimer = setInterval(() => {
+          if (this.codeTimer > 0 && this.codeTimer <= 60) {
+            this.codeTimer--
+          } else {
+            this.dydShow = true
+            clearInterval(this.countdownTimer) // 清除定时器
+            this.countdownTimer = null
+          }
+        }, 1000)
+      }
     },
     goLogin () {
       this.$router.push('./login')
@@ -135,6 +118,16 @@ export default {
 
 <style lang="less" scoped>
 body {
+  .verifiInput.el-input /deep/ .el-input__inner {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+  .verifiButton{
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    height: 41px;
+    margin-top: 1px;
+  }
   .register_background {
     position: fixed;
     width: 100%;

@@ -7,8 +7,8 @@ import router from '@/router/index'
 import { Message } from 'element-ui'
 
 // 导出基地址方便图片获取拼接使用
-// export const baseURL = 'http://124.222.81.137:9090'
-export const baseURL = 'http://www.expresssearch.xyz'
+export const baseURL = 'http://124.222.81.137:9090'
+// export const baseURL = 'http://www.expresssearch.xyz'
 const myAxios = axios.create({
   baseURL,
   withCredentials: true
