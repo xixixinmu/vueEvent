@@ -32,11 +32,12 @@ export const loginAPI = ({ username, password }) => {
   })
 }
 
-export const statisticsAPI = (formData) => {
+export const statisticsAPI = (page) => {
   return request({
     url: '/api/statistics',
-    method: 'POST',
-    data: formData
+    params: {
+      page
+    }
   })
 }
 
@@ -92,9 +93,6 @@ export const getUserInfo = () => {
   return request({
     url: '/api/userInfo',
     method: 'GET'
-    // params: {
-    //   cont_sign: cont_sign
-    // }
   })
 }
 

@@ -7,8 +7,8 @@
         :data="tableData"
         tooltip-effect="dark"
         style="width: 100%"
-        @selection-change="handleSelectionChange"
       >
+      <!-- @selection-change="handleSelectionChange"-->
         <el-table-column type="selection" align="center"></el-table-column>
         <el-table-column label="用户名" align="center" prop="username"></el-table-column>
         <el-table-column label="手机号" align="center" prop="phone"></el-table-column>
@@ -34,6 +34,7 @@
     <div style="margin-top: 20px; width: 100%">
       <div class="block" style="float: right; padding: 0px 0px 10px">
         <el-pagination
+          :page-size="pageSize"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
           background
@@ -56,6 +57,7 @@ export default {
       loading: true,
       tableData: [],
       currentPage: 1,
+      pageSize: 0,
       total: null
     }
   },
@@ -64,35 +66,31 @@ export default {
   },
   methods: {
     // 处理选项框的操作，获取表格中哪些选项被选中
-    handleSelectionChange (val) {
-      this.multipleSelection = val
-    },
+    // handleSelectionChange (val) {
+    //   this.multipleSelection = val
+    // },
     handleCurrentChange (val = 1) {
-      console.log(`当前页: ${val}`)
       this.currentPage = val
       console.log(this.currentPage)
       this.getList(this.currentPage)
     },
     // 得到统计列表
     async getList (page) {
-      const formData = new FormData()
-      formData.append('page', page)
-      const { data: res } = await statisticsAPI(formData)
+      const { data: res } = await statisticsAPI(page)
       if (res.code === '200') {
-        console.log(res.data)
         this.total = res.data.count
         this.tableData = res.data.briefList
+        this.pageSize = res.data.briefList.length
       } else {
         this.$message({
           type: 'warning',
           message: res.msg
         })
       }
-      // this.tableData = JSON.parse(res.data)
     }
   }
 }
 </script>
 
-    <style scoped>
+<style scoped>
 </style>

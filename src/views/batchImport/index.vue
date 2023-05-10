@@ -14,7 +14,9 @@
           <!-- <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
         </el-upload>
         <br/>
-        <el-button type="primary" icon="el-icon-download">下载批量导入模版</el-button>
+        <el-link target="_blank" :href="downloadUrl" :underline="false">
+          <el-button type="primary" icon="el-icon-download" >下载批量导入模版</el-button>
+        </el-link>
     </div>
 </template>
 
@@ -24,13 +26,17 @@ export default {
   name: 'batchImport',
   data () {
     return {
-      baseURL
+      baseURL,
+      downloadUrl: 'http://124.222.81.137:8080/test.xlsx'
     }
   },
   methods: {
     handleChange (files) {
       console.log(files.raw)
     }
+    // uploadTest () {
+    //   window.location.href = baseURL + '/home/ubuntu/vueDemo/test.xlsx'
+    // }
   }
 }
 </script>

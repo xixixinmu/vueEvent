@@ -19,30 +19,6 @@
       </el-descriptions>
     </el-card>
     <br/>
-    <el-card>
-      <el-descriptions title="充值信息">
-        <el-descriptions-item label="充值金额">{{form.addTimes}}</el-descriptions-item>
-        <el-descriptions-item label="已使用金额">{{form.searchTimes}}</el-descriptions-item>
-        <el-descriptions-item label="剩余金额">{{form.deleteTimes}}</el-descriptions-item>
-      </el-descriptions>
-      <br/>
-      <div style="display:flex">
-        <div style="margin-right:30px">
-          <h3>微信充值：</h3>
-          <el-image
-          style="width: 100px; height: 100px"
-          :src="require('@/assets/wx.png')">
-          </el-image>
-        </div>
-        <div>
-          <h3>支付宝充值：</h3>
-          <el-image
-          style="width: 100px; height: 100px"
-          :src="require('@/assets/zxb.png')">
-          </el-image>
-        </div>
-      </div>
-    </el-card>
   </div>
 </template>
 
