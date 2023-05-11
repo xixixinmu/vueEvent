@@ -104,6 +104,14 @@ export const updateDelivery = (formData) => {
   })
 }
 
+export const batchImportDelivery = (formData) => {
+  return request({
+    url: '/api/upload',
+    method: 'POST',
+    data: formData
+  })
+}
+
 export const sendVerifiCode = (phone) => {
   return request({
     url: '/api/getBack',

@@ -5,9 +5,9 @@
         <el-upload
           class="upload-demo"
           drag
-          :action="baseURL"
+          action
           multiple
-          :on-change="handleChange"
+          :http-request="handleChange"
           >
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -22,21 +22,36 @@
 
 <script>
 import { baseURL } from '@/utils/request'
+import { batchImportDelivery } from '@/api/index'
+
 export default {
   name: 'batchImport',
   data () {
     return {
       baseURL,
-      downloadUrl: 'http://124.222.81.137:8080/test.xlsx'
+      downloadUrl: 'http://124.222.81.137:8080/test.xlsx',
+      uploadUrl: baseURL + '/api/upload'
     }
   },
   methods: {
-    handleChange (files) {
-      console.log(files.raw)
+    async handleChange (files) {
+      console.log(files.file)
+      // console.log()
+      const formdata = new FormData()
+      formdata.append('file', files.file)
+      const { data: res } = await batchImportDelivery(formdata)
+      console.log(res)
+      if (res.code !== '200') {
+        return this.$message.error(res.msg)
+        // $message为elementUI封装的弹窗
+      } else {
+        if (res.data.fail !== {}) {
+          this.$message.success(res.data.count + ',' + res.data.fail['1'])
+        } else {
+          this.$message.success(res.data.count)
+        }
+      }
     }
-    // uploadTest () {
-    //   window.location.href = baseURL + '/home/ubuntu/vueDemo/test.xlsx'
-    // }
   }
 }
 </script>
