@@ -65,7 +65,6 @@ export default {
           const formData = new FormData()
           formData.append('code', this.form.inputVal)
           const { data: res } = await receiveVerifiCode(formData)
-          console.log(res)
           if (res.code !== '200') {
             return this.$message.error(res.msg)
             // $message为elementUI封装的弹窗
@@ -86,7 +85,6 @@ export default {
       const formData = new FormData()
       formData.append('phone', this.form.phone)
       const { data: res } = await sendVerifiCode(formData)
-      console.log(res)
       if (res.code !== '200') {
         return this.$message.error(res.msg)
       } else {

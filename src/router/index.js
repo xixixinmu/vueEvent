@@ -60,6 +60,10 @@ const routes = [
       {
         path: '/batchImport',
         component: () => import('@/views/batchImport')
+      },
+      {
+        path: '/claimPage',
+        component: () => import('@/views/claimPage')
       }
     ]
   }

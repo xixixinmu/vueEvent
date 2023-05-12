@@ -73,7 +73,6 @@ export default {
           const formData = new FormData()
           formData.append('password', this.form.password)
           const { data: res } = await changePassword(formData)
-          console.log(res)
           if (res.code !== '200') {
             return this.$message.error(res.msg)
             // $message为elementUI封装的弹窗

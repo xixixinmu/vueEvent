@@ -59,6 +59,7 @@
             <el-button type="text" @click="goToEdit(item)">编辑</el-button>
             <el-button type="text" @click="openDelete(item)">删除</el-button>
           </div>
+          <el-button type="text" @click="goToClaim(item)">认领快件</el-button>
         </div>
       </div>
     </el-card>
@@ -234,7 +235,6 @@ export default {
       }).then(() => {
         // 点击确定后发送请求检查余额  如果成功扣费则打开快件详细信息 并且给编辑和删除权限
         this.detailData = item
-        console.log(item)
         this.dialogVisible = true
       }).then(() => {
 
@@ -248,6 +248,9 @@ export default {
     },
     goToEditExpress () {
       this.$router.push('/addDelivery')
+    },
+    goToClaim () {
+      this.$router.push('/claimPage')
     }
   }
 }

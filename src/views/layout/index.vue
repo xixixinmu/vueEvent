@@ -173,7 +173,7 @@ export default {
             title: '管理快件'
           },
           {
-            icon: 'el-icon-s-cooperation',
+            icon: 'el-icon-document',
             indexPath: '/statistics',
             title: '统计功能'
           }

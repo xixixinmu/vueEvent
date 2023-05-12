@@ -35,12 +35,9 @@ export default {
   },
   methods: {
     async handleChange (files) {
-      console.log(files.file)
-      // console.log()
       const formdata = new FormData()
       formdata.append('file', files.file)
       const { data: res } = await batchImportDelivery(formdata)
-      console.log(res)
       if (res.code !== '200') {
         return this.$message.error(res.msg)
         // $message为elementUI封装的弹窗
