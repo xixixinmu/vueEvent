@@ -71,7 +71,6 @@ export default {
     // },
     handleCurrentChange (val = 1) {
       this.currentPage = val
-      console.log(this.currentPage)
       this.getList(this.currentPage)
     },
     // 得到统计列表

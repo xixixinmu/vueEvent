@@ -135,3 +135,11 @@ export const changePassword = (password) => {
     data: password
   })
 }
+
+export const claimAPI = (formData) => {
+  return request({
+    url: '/api/adopt',
+    method: 'POST',
+    data: formData
+  })
+}

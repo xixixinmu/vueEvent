@@ -249,8 +249,13 @@ export default {
     goToEditExpress () {
       this.$router.push('/addDelivery')
     },
-    goToClaim () {
-      this.$router.push('/claimPage')
+    goToClaim (item) {
+      this.$router.push({
+        path: '/claimPage',
+        query: {
+          cont_sign: item.cont_sign
+        }
+      })
     }
   }
 }

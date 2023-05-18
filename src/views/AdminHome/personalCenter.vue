@@ -37,7 +37,6 @@ export default {
   methods: {
     async getUser () {
       const { data: res } = await getUserInfo()
-      console.log(res)
       this.form = res.data
     }
   }
