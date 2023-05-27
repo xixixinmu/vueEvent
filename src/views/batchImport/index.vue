@@ -42,7 +42,8 @@ export default {
         return this.$message.error(res.msg)
         // $message为elementUI封装的弹窗
       } else {
-        if (res.data.fail !== {}) {
+        console.log(Object.keys(res.data.fail).length !== 0)
+        if (Object.keys(res.data.fail).length !== 0) {
           this.$message.success(res.data.count + ',' + res.data.fail['1'])
         } else {
           this.$message.success(res.data.count)

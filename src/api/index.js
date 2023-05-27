@@ -143,3 +143,12 @@ export const claimAPI = (formData) => {
     data: formData
   })
 }
+
+export const adoptInfoAPI = (page) => {
+  return request({
+    url: '/api/adoptInfo',
+    params: {
+      page
+    }
+  })
+}

@@ -64,6 +64,10 @@ const routes = [
       {
         path: '/claimPage',
         component: () => import('@/views/claimPage')
+      },
+      {
+        path: '/adoptInfo',
+        component: () => import('@/views/adoptInfo')
       }
     ]
   }

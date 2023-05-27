@@ -176,6 +176,11 @@ export default {
             icon: 'el-icon-document',
             indexPath: '/statistics',
             title: '统计功能'
+          },
+          {
+            icon: 'el-icon-s-goods',
+            indexPath: '/adoptInfo',
+            title: '认领信息'
           }
         ]
       }

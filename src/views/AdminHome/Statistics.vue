@@ -9,7 +9,6 @@
         style="width: 100%"
       >
       <!-- @selection-change="handleSelectionChange"-->
-        <el-table-column type="selection" align="center"></el-table-column>
         <el-table-column label="用户名" align="center" prop="username"></el-table-column>
         <el-table-column label="手机号" align="center" prop="phone"></el-table-column>
         <el-table-column label="入库次数" align="center">
@@ -32,13 +31,13 @@
       </el-table>
     </div>
     <div style="margin-top: 20px; width: 100%">
-      <div class="block" style="float: right; padding: 0px 0px 10px">
+      <div>
         <el-pagination
           :page-size="pageSize"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
           background
-          layout="total, prev, pager, next, jumper"
+          layout="->,total, prev, pager, next, jumper"
           :total="total"
         >
         </el-pagination>
@@ -54,7 +53,6 @@ export default {
   name: 'Statistics',
   data () {
     return {
-      loading: true,
       tableData: [],
       currentPage: 1,
       pageSize: 0,
@@ -65,10 +63,6 @@ export default {
     this.handleCurrentChange()
   },
   methods: {
-    // 处理选项框的操作，获取表格中哪些选项被选中
-    // handleSelectionChange (val) {
-    //   this.multipleSelection = val
-    // },
     handleCurrentChange (val = 1) {
       this.currentPage = val
       this.getList(this.currentPage)
